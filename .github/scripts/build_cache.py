@@ -5,30 +5,60 @@ import pandas as pd
 TMDB_API_KEY = os.getenv("TMDB_API_KEY", "").strip()
 OUT_PATH = os.path.join("cache", "netflix_nl_series.json")
 
-# ✅ JUISTE CSV-bronnen (GEEN tudum!)
+# Officiële datasets (moeten op 'top10.netflix.com' blijven)
 CSV_URLS = [
     "https://top10.netflix.com/data/AllWeeklyTop10ByCountry.csv",
     "https://top10.netflix.com/data/AllWeeklyTop10.csv",
 ]
 
-HEADERS = {
-    "User-Agent": "Mozilla/5.0",
-    "Referer": "https://top10.netflix.com/"
+# Minimalistische headers; GEEN 'Referer' meer (die triggert soms een redirect naar tudum)
+HEADERS_PRIMARY = {
+    "User-Agent": "Mozilla/5.0"
 }
+HEADERS_SECONDARY = {}  # fallback: helemaal kaal
 
-def fetch_csv():
+def fetch_csv_once(url: str, headers: dict) -> str:
+    """
+    Fetch zonder (foute) cross-domain redirect.
+    - Volg alleen redirects die op top10.netflix.com blijven.
+    - Als redirect naar 'www.netflix.com/tudum/...' => behandel als fout.
+    """
+    with requests.Session() as s:
+        r = s.get(url, headers=headers, timeout=30, allow_redirects=False)
+        # Handmatig redirect afhandelen (alleen als het op hetzelfde domein blijft)
+        if r.is_redirect or r.is_permanent_redirect:
+            loc = r.headers.get("Location", "")
+            # Normaliseer
+            loc_low = loc.lower()
+            if loc and loc_low.startswith("https://top10.netflix.com/"):
+                r = s.get(loc, headers=headers, timeout=30, allow_redirects=False)
+            else:
+                # Redirect naar ander domein (bijv. www.netflix.com/tudum/...) => forceer fout
+                raise RuntimeError(f"Unexpected redirect to different host: {loc}")
+
+        r.raise_for_status()
+        text = (r.text or "").strip()
+        if not text or text.lower() == "null":
+            raise RuntimeError("CSV body is empty or 'null'")
+        return text
+
+def fetch_csv() -> str:
     last_error = None
     for url in CSV_URLS:
+        # 1) poging met minimal headers (zonder referer)
         try:
-            print(f"[build_cache] Fetching CSV: {url}")
-            r = requests.get(url, headers=HEADERS, timeout=30)
-            r.raise_for_status()
-            t = (r.text or "").strip()
-            if t and t.lower() != "null":
-                return t
-        except Exception as e:
-            print(f"[build_cache] Failed: {e}")
-            last_error = e
+            print(f"[build_cache] Fetching CSV (primary): {url}")
+            return fetch_csv_once(url, HEADERS_PRIMARY)
+        except Exception as e1:
+            print(f"[build_cache] Primary failed: {e1}")
+
+        # 2) fallback-headers (helemaal kaal)
+        try:
+            print(f"[build_cache] Fetching CSV (secondary): {url}")
+            return fetch_csv_once(url, HEADERS_SECONDARY)
+        except Exception as e2:
+            print(f"[build_cache] Secondary failed: {e2}")
+            last_error = e2
     raise RuntimeError(f"Kon CSV niet ophalen. Laatste fout: {last_error}")
 
 def tmdb_tv_lookup(title):
