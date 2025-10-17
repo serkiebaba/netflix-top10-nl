@@ -21,7 +21,7 @@ jobs:
           python-version: "3.11"
 
       - name: Install deps
-        run: pip install requests pandas lxml beautifulsoup4
+        run: pip install requests pandas lxml beautifulsoup4 html5lib
 
       - name: Build cache JSON
         env:
