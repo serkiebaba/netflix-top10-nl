@@ -20,8 +20,9 @@ jobs:
         with:
           python-version: "3.11"
 
-      - name: Install deps
-        run: pip install requests pandas
+- name: Install deps
+  run: pip install requests pandas lxml beautifulsoup4
+
 
       - name: Build cache JSON
         env:
