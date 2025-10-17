@@ -1,4 +1,4 @@
-import os, io, json
+import os, io, json, re
 import requests
 import pandas as pd
 from bs4 import BeautifulSoup
@@ -18,12 +18,11 @@ def fetch_csv_text_or_raise():
     for url in CSV_URLS:
         try:
             print(f"[build_cache] Try CSV: {url}")
-            # GEEN referer; laat redirects toe (sommige IP's vereisen het), we accepteren 200 of 3xx->200
             r = requests.get(url, headers={"User-Agent": UA}, timeout=30, allow_redirects=True)
             r.raise_for_status()
             t = (r.text or "").strip()
             if t and t.lower() != "null":
-                print("[build_cache] CSV ok")
+                print("[build_cache] CSV OK")
                 return t
             raise RuntimeError("CSV leeg of 'null'")
         except Exception as e:
@@ -31,76 +30,65 @@ def fetch_csv_text_or_raise():
             last_error = e
     raise RuntimeError(f"CSV niet beschikbaar: {last_error}")
 
-def fetch_html_table_titles(country="netherlands", section="tv"):
+def read_csv_robust(csv_text: str) -> pd.DataFrame:
     """
-    Fallback: haal de NL Top10 HTML op en parse de tabel.
-    URL-voorbeeld: https://www.netflix.com/tudum/top10/netherlands/tv
-    We extraheren de titels en ranks (top 10).
+    Netflix CSV wisselt soms kolomaantallen/quoting. We proberen meerdere parsers.
+    """
+    # 1) snelste parser
+    try:
+        return pd.read_csv(io.StringIO(csv_text))
+    except Exception as e1:
+        print(f"[build_cache] pandas default failed: {e1}")
+    # 2) python-engine, toleranter
+    try:
+        return pd.read_csv(io.StringIO(csv_text), engine="python")
+    except Exception as e2:
+        print(f"[build_cache] engine=python failed: {e2}")
+    # 3) laatste redmiddel: skip slechte regels
+    try:
+        return pd.read_csv(io.StringIO(csv_text), engine="python", on_bad_lines="skip")
+    except Exception as e3:
+        print(f"[build_cache] on_bad_lines=skip failed: {e3}")
+        raise
+
+def html_fallback_titles(country="netherlands", section="tv"):
+    """
+    Simpele HTML fallback: pak #1..#10 titels van de Tudum-pagina.
     """
     url = f"https://www.netflix.com/tudum/top10/{country}/{section}"
     print(f"[build_cache] Fallback HTML: {url}")
     r = requests.get(url, headers={"User-Agent": UA}, timeout=30)
     r.raise_for_status()
-    html = r.text
+    soup = BeautifulSoup(r.text, "html.parser")
 
-    # 1) Probeer met pandas.read_html (werkt vaak direct):
-    try:
-        tables = pd.read_html(html, flavor="bs4")  # vereist lxml + bs4
-        # Zoek tabel met 'Rank' kolom
-        target = None
-        for tb in tables:
-            cols = [str(c).strip().lower() for c in tb.columns]
-            if any("rank" in c for c in cols):
-                target = tb
-                break
-        if target is None:
-            raise RuntimeError("Geen tabel met 'Rank' kolom gevonden")
-        # Normaliseer kolomnamen
-        target.columns = [str(c).strip().lower() for c in target.columns]
-        # Vind kolommen
-        rank_col = next((c for c in target.columns if "rank" in c), None)
-        title_col = next((c for c in target.columns if "title" in c or "show" in c or "series" in c or "program" in c), None)
-        if title_col is None:
-            # fallback: soms staat de titel als index/kolom-0
-            title_col = target.columns[0]
-        # Sorteer en pak top 10
-        df10 = target.sort_values(by=rank_col).head(10) if rank_col else target.head(10)
-        titles = [str(x).strip() for x in df10[title_col].tolist()]
-        ranks  = list(range(1, len(titles)+1)) if rank_col is None else [int(v) for v in df10[rank_col].tolist()][:len(titles)]
-        if not titles:
-            raise RuntimeError("Geen titels uit tabel kunnen halen")
-        return list(zip(ranks, titles))
-    except Exception as e:
-        print(f"[build_cache] read_html faalde: {e}")
-
-    # 2) Als read_html niet lukt, brute-force met BeautifulSoup
-    soup = BeautifulSoup(html, "html.parser")
-    rows = []
-    # Zoek alle <table> en probeer rijen te lezen
-    for table in soup.find_all("table"):
-        for tr in table.find_all("tr"):
-            tds = tr.find_all(["td","th"])
-            texts = [td.get_text(strip=True) for td in tds]
-            if not texts:
-                continue
-            # Heuristiek: regel bevat rank + titel
-            # rank is cijfer 1..10
-            try:
-                possible_rank = int(texts[0])
-                # titel is ergens in de rest
-                title = None
-                for tx in texts[1:]:
-                    if len(tx) > 1 and not tx.isdigit():
-                        title = tx
-                        break
-                if possible_rank in range(1, 11) and title:
-                    rows.append((possible_rank, title))
-            except:
-                continue
-    rows = sorted(rows, key=lambda x: x[0])[:10]
-    if not rows:
+    # 1) Probeer tabelrijen met rangen 1..10 te vinden
+    titles = []
+    # vind alle tekst, zoek regels met rank en een plausibele titel
+    candidates = [el.get_text(" ", strip=True) for el in soup.find_all(["tr","li","p","div","span"])]
+    rank_pat = re.compile(r"^\s*(?:#)?([1-9]|10)\b")
+    for txt in candidates:
+        m = rank_pat.match(txt)
+        if not m:
+            continue
+        # heuristiek: titel is rest van de regel na het rangnummer/symbool
+        rest = txt[m.end():].strip(" .:-–—")
+        # filter ruis
+        if rest and len(rest) > 1 and not rest.isdigit():
+            rank = int(m.group(1))
+            titles.append((rank, rest))
+    # dedup & top10
+    seen = set()
+    uniq = []
+    for rnk, name in sorted(titles, key=lambda x: x[0]):
+        key = (rnk, name.lower())
+        if rnk <= 10 and key not in seen:
+            uniq.append((rnk, name))
+            seen.add(key)
+        if len(uniq) == 10:
+            break
+    if not uniq:
         raise RuntimeError("HTML fallback kon geen rijen vinden")
-    return rows
+    return uniq
 
 def tmdb_tv_lookup(title):
     if not TMDB_API_KEY:
@@ -127,13 +115,11 @@ def tmdb_tv_lookup(title):
     return None, None
 
 def main():
-    titles_by_rank = None
-
-    # 1) Probeer CSV
     try:
         csv_text = fetch_csv_text_or_raise()
-        df = pd.read_csv(io.StringIO(csv_text))
-        # Case-insensitive kolomhelpers
+        df = read_csv_robust(csv_text)
+
+        # kolomhelpers
         cn = [c.lower() for c in df.columns]
         def col(name, fallbacks=()):
             for i, c in enumerate(cn):
@@ -149,6 +135,7 @@ def main():
         rank_col      = col("weekly_rank", ("rank",))
         category_col  = col("category",)
         title_col     = col("show_title", ("title","show_title_name","series_title"))
+
         dfnl = df[(df[country_col] == "Netherlands") & (df[category_col].str.upper().str.contains("TV"))]
 
         # Laatste week wanneer beschikbaar
@@ -165,11 +152,9 @@ def main():
 
         dfnl = dfnl.sort_values(by=rank_col).head(10)
         titles_by_rank = [(int(r[rank_col]), str(r[title_col]).strip()) for _, r in dfnl.iterrows()]
-
     except Exception as e:
-        print(f"[build_cache] CSV path failed, fallback to HTML: {e}")
-        # 2) Fallback: HTML tabel NL/TV
-        titles_by_rank = fetch_html_table_titles("netherlands", "tv")
+        print(f"[build_cache] CSV pad faalde -> HTML fallback: {e}")
+        titles_by_rank = html_fallback_titles("netherlands", "tv")
 
     # Bouw metas
     metas = []
