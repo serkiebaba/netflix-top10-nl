@@ -16,12 +16,10 @@ def load_cached_metas():
     try:
         with open(CACHE_PATH, "r", encoding="utf-8") as f:
             data = json.load(f)
-        # verwacht: {"metas": [...]}
         if isinstance(data, dict) and "metas" in data:
             return data["metas"]
     except Exception:
         pass
-    # fallback als er nog geen data is
     return [{
         "id": "netflix-nl-cache-missing",
         "type": CATALOG_TYPE,
@@ -46,8 +44,7 @@ def manifest():
 
 @app.route(f"/catalog/{CATALOG_TYPE}/{CATALOG_ID}.json")
 def catalog():
-    metas = load_cached_metas()
-    return jsonify({"metas": metas})
+    return jsonify({"metas": load_cached_metas()})
 
 @app.route("/")
 def root():
