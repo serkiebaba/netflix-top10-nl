@@ -1,94 +1,206 @@
-import os, io, json
+import os, io, json, datetime
 import requests
 import pandas as pd
+from bs4 import BeautifulSoup
 
 TMDB_API_KEY = os.getenv("TMDB_API_KEY", "").strip()
-OUT_PATH = os.path.join("cache", "netflix_nl_series.json")
 
-PRIMARY_CSV = [
-    "https://top10.netflix.com/data/AllWeeklyTop10ByCountry.csv",
-    "https://top10.netflix.com/data/AllWeeklyTop10.csv",
-]
-
-PROXY_CSV = [
-    # read-only mirrors (geven de CSV body als tekst terug)
-    "https://r.jina.ai/http://top10.netflix.com/data/AllWeeklyTop10ByCountry.csv",
-    "https://r.jina.ai/http://top10.netflix.com/data/AllWeeklyTop10.csv",
-    "https://r.jina.ai/https://top10.netflix.com/data/AllWeeklyTop10ByCountry.csv",
-    "https://r.jina.ai/https://top10.netflix.com/data/AllWeeklyTop10.csv",
-]
+# output-bestanden
+OUT_SERIES = os.path.join("cache", "netflix_nl_series.json")   # blijft je huidige Stremio dataset
+OUT_MOVIES = os.path.join("cache", "netflix_nl_movies.json")   # extra (optioneel gebruiken in Stremio)
 
 UA = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120 Safari/537.36"
+BASE = "https://flixpatrol.com/top10/streaming/netherlands/{date}/"
 
-def _looks_like_csv(r: requests.Response, text: str) -> bool:
-    # 1) content-type check (sterk signaal)
-    ctype = (r.headers.get("Content-Type") or "").lower()
-    if "text/csv" in ctype or "application/csv" in ctype:
-        return True
-    # soms geeft proxy/plain text terug; valideer headerregel op verwachte kolommen
-    first_line = text.splitlines()[0] if text else ""
-    if "," not in first_line:
-        return False
-    header_lower = [h.strip().lower() for h in first_line.split(",")]
-    expected_tokens = {"country", "country_name", "weekly_rank", "category", "show_title", "title"}
-    return any(tok in header_lower for tok in expected_tokens)
+def date_candidates(days_back=7):
+    today = datetime.date.today()
+    for d in range(days_back + 1):
+        yield (today - datetime.timedelta(days=d)).strftime("%Y-%m-%d")
 
-def fetch_text(url: str) -> str:
-    r = requests.get(
-        url,
-        headers={"User-Agent": UA, "Accept": "text/csv,application/csv,*/*"},
-        timeout=40,
-        allow_redirects=True,
-    )
-    r.raise_for_status()
-    t = (r.text or "").strip()
-    if not t or t.lower() == "null":
-        raise RuntimeError("empty body")
-    if not _looks_like_csv(r, t):
-        raise RuntimeError(f"not CSV (content-type={r.headers.get('Content-Type')}, first_line={t[:120]!r})")
-    return t
-
-def fetch_csv_text() -> str:
-    last = None
-    for u in PRIMARY_CSV:
+def fetch_first_available_html():
+    s = requests.Session()
+    s.headers.update({"User-Agent": UA, "Accept": "text/html,*/*"})
+    last_err = None
+    for ds in date_candidates(7):
+        url = BASE.format(date=ds)
         try:
-            print(f"[build_cache] CSV try (primary): {u}")
-            return fetch_text(u)
+            print(f"[flix] try {url}")
+            r = s.get(url, timeout=30)
+            if r.status_code == 404:
+                last_err = "404"
+                continue
+            r.raise_for_status()
+            html = r.text
+            # sanity: pagina moet "Netflix TOP 10 in the Netherlands" of "TOP 10" bevatten
+            if "Netflix TOP 10 in the Netherlands" not in html and "TOP 10 Movies" not in html:
+                last_err = "unexpected page content"
+                continue
+            return ds, html
         except Exception as e:
-            print(f"[build_cache] primary failed: {e}")
-            last = e
-    for u in PROXY_CSV:
-        try:
-            print(f"[build_cache] CSV try (proxy): {u}")
-            return fetch_text(u)
-        except Exception as e:
-            print(f"[build_cache] proxy failed: {e}")
-            last = e
-    raise RuntimeError(f"Kon CSV niet ophalen: {last}")
+            last_err = str(e)
+    raise RuntimeError(f"Kon geen bruikbare FlixPatrol NL pagina vinden: {last_err}")
 
-def read_csv_robust(csv_text: str) -> pd.DataFrame:
-    for kwargs in ({}, {"engine": "python"}, {"engine": "python", "on_bad_lines": "skip"}):
-        try:
-            return pd.read_csv(io.StringIO(csv_text), **kwargs)
-        except Exception as e:
-            print(f"[build_cache] read_csv failed with {kwargs or 'default'}: {e}")
-    raise RuntimeError("pandas kon CSV niet parsen")
+def find_netflix_section(html):
+    soup = BeautifulSoup(html, "html.parser")
 
-def tmdb_tv_lookup(title: str):
+    # 1) Zoek heading met "Netflix TOP 10 in the Netherlands"
+    target_h = None
+    for h in soup.find_all(["h1", "h2", "h3"]):
+        t = (h.get_text(" ", strip=True) or "").lower()
+        if t.startswith("netflix top 10 in the netherlands"):
+            target_h = h
+            break
+    if not target_h:
+        # fallback: eerste blok op de pagina is meestal Netflix; neem eerste heading met "top 10" + "netherlands"
+        for h in soup.find_all(["h1", "h2", "h3"]):
+            t = (h.get_text(" ", strip=True) or "").lower()
+            if "top 10" in t and "netherlands" in t and "netflix" in t:
+                target_h = h
+                break
+    if not target_h:
+        raise RuntimeError("Netflix heading niet gevonden")
+
+    # 2) Verzamel siblings tot aan de volgende provider-heading (HBO/Disney/Prime/etc.)
+    block_nodes = []
+    for sib in target_h.next_siblings:
+        if getattr(sib, "name", None) in ("h1", "h2", "h3"):
+            txt = (sib.get_text(" ", strip=True) or "").lower()
+            # bij de volgende provider stoppen we
+            if " top 10 in the netherlands" in txt and "netflix" not in txt:
+                break
+        block_nodes.append(sib)
+
+    # 3) In deze blok nodes zoeken we twee tabellen: "TOP 10 Movies" en "TOP 10 TV Shows"
+    block_html = "".join(str(x) for x in block_nodes)
+    if not block_html.strip():
+        raise RuntimeError("Netflix-blok is leeg")
+
+    return block_html
+
+def table_to_top10(df):
+    """Normaliseer df naar [(rank, title)]."""
+    if df is None or df.empty:
+        return []
+    d = df.copy()
+    d.columns = [str(c).strip().lower() for c in d.columns]
+    # titelkolom
+    name_col = None
+    for k in ["title", "show", "program", "film", "name"]:
+        if k in d.columns:
+            name_col = k
+            break
+    if not name_col:
+        name_col = d.columns[0]
+    # rankkolom
+    rank_col = None
+    if "#" in d.columns: rank_col = "#"
+    elif "rank" in d.columns: rank_col = "rank"
+
+    if rank_col:
+        with pd.option_context("mode.chained_assignment", None):
+            d[rank_col] = pd.to_numeric(d[rank_col], errors="coerce")
+            d = d.sort_values(by=rank_col)
+    d = d.head(10)
+
+    out, r = [], 1
+    for _, row in d.iterrows():
+        name = str(row[name_col]).strip()
+        if not name: 
+            continue
+        rr = int(row[rank_col]) if rank_col and pd.notna(row.get(rank_col)) else r
+        out.append((rr, name))
+        r += 1
+
+    # dedup op titel, behoud volgorde
+    seen, unique = set(), []
+    for rr, nm in out:
+        key = nm.lower()
+        if key in seen: 
+            continue
+        unique.append((rr, nm))
+        seen.add(key)
+        if len(unique) == 10:
+            break
+    return unique
+
+def parse_netflix_top10(block_html):
+    """Zoekt in het Netflix-blok de twee tabellen: Movies en TV Shows."""
+    # Probeer eerst pandas.read_html op alleen het Netflix-blok
+    movies, shows = None, None
+    try:
+        dfs = pd.read_html(block_html, flavor="bs4")
+        # we labelen op basis van de heading vóór de tabel
+        soup = BeautifulSoup(block_html, "html.parser")
+
+        def label_table(tb):
+            # pak de tabel als node en kijk naar voorafgaande heading/label
+            node = soup.find(lambda tag: tag.name == "table" and tag.get_text(" ", strip=True)[:30] in tb.to_string()[:30])
+            # fallback: gewoon de eerstvolgende heading boven de tabel pakken
+            if not node:
+                node = soup.find("table")
+            hdr = None
+            if node:
+                # loop omhoog en zoek 'TOP 10 Movies' / 'TOP 10 TV Shows' in siblings/buren
+                prev = node
+                for _ in range(8):
+                    prev = prev.find_previous(["h4", "h3", "h2", "div"])
+                    if not prev: break
+                    txt = (prev.get_text(" ", strip=True) or "").lower()
+                    if "top 10 movies" in txt:
+                        return "movies"
+                    if "top 10 tv shows" in txt or "top 10 shows" in txt:
+                        return "shows"
+            # als we niets kunnen labelen, beslissen we later op heuristiek
+            return None
+
+        labeled = []
+        for df in dfs:
+            label = label_table(df)
+            labeled.append((label, df))
+
+        # Distribution
+        if labeled:
+            # probeer met labels
+            for lab, df in labeled:
+                if lab == "movies" and movies is None:
+                    movies = df
+                elif (lab == "shows" or lab == "tv") and shows is None:
+                    shows = df
+
+            # nog niet gelabeld? neem de eerste 2 tabellen: [movies, shows]
+            if not movies or not shows:
+                if len(dfs) >= 2:
+                    if not movies: movies = dfs[0]
+                    if not shows:  shows  = dfs[1]
+                elif len(dfs) == 1:
+                    shows = dfs[0]  # kies als series bij gebrek aan beter
+    except Exception as e:
+        print(f"[flix] pandas.read_html failed on netflix block: {e}")
+        # Fallback met soup + handmatige parsing
+        soup = BeautifulSoup(block_html, "html.parser")
+        all_tables = soup.find_all("table")
+        if len(all_tables) >= 2:
+            movies_html = str(all_tables[0])
+            shows_html  = str(all_tables[1])
+            try:  movies = pd.read_html(movies_html)[0]
+            except: movies = None
+            try:  shows  = pd.read_html(shows_html)[0]
+            except: shows  = None
+
+    return movies, shows
+
+def tmdb_lookup(title, is_series=True):
     if not TMDB_API_KEY:
         return None, None
     try:
-        resp = requests.get(
-            "https://api.themoviedb.org/3/search/tv",
-            params={
-                "api_key": TMDB_API_KEY,
-                "query": title,
-                "include_adult": "false",
-                "language": "nl-NL",
-                "page": 1,
-            },
-            timeout=20,
-        )
+        url = "https://api.themoviedb.org/3/search/tv" if is_series else "https://api.themoviedb.org/3/search/movie"
+        resp = requests.get(url, params={
+            "api_key": TMDB_API_KEY,
+            "query": title,
+            "include_adult": "false",
+            "language": "nl-NL",
+            "page": 1
+        }, timeout=20)
         resp.raise_for_status()
         j = resp.json()
         if j.get("results"):
@@ -98,76 +210,57 @@ def tmdb_tv_lookup(title: str):
         pass
     return None, None
 
-def main():
-    csv_text = fetch_csv_text()
-    df = read_csv_robust(csv_text)
-
-    # kolomhelpers (case-insensitive + fallbacks)
-    cn = [c.lower() for c in df.columns]
-    def col(name, fallbacks=()):
-        for i, c in enumerate(cn):
-            if c == name.lower():
-                return df.columns[i]
-        for fb in fallbacks:
-            for i, c in enumerate(cn):
-                if c == fb.lower():
-                    return df.columns[i]
-        raise KeyError(f"Kolom {name} niet gevonden (beschikbaar: {df.columns.tolist()})")
-
-    country_col   = col("country_name", ("country",))
-    rank_col      = col("weekly_rank", ("rank",))
-    category_col  = col("category",)
-    title_col     = col("show_title", ("title","show_title_name","series_title"))
-
-    # Filter Netherlands + TV
-    dfnl = df[(df[country_col] == "Netherlands") & (df[category_col].astype(str).str.upper().str.contains("TV"))]
-
-    # Laatste week (indien aanwezig)
-    week_col = None
-    for wk in ["week", "week_end", "week_start", "week_ended_on"]:
-        try:
-            week_col = col(wk)
-            break
-        except KeyError:
-            continue
-    if week_col is not None and week_col in dfnl.columns:
-        latest_week = dfnl[week_col].max()
-        dfnl = dfnl[dfnl[week_col] == latest_week]
-
-    dfnl = dfnl.sort_values(by=rank_col, ascending=True).head(10)
-
+def build_metas(list_titles, is_series=True):
     metas = []
-    for _, row in dfnl.iterrows():
-        name = str(row[title_col]).strip()
-        try:
-            rank = int(row[rank_col])
-        except Exception:
-            try:
-                rank = int(float(row[rank_col]))
-            except Exception:
-                rank = len(metas) + 1
-        tmdb_id, poster_path = tmdb_tv_lookup(name)
-        if tmdb_id:
-            metas.append({
-                "id": f"tmdb:tv:{tmdb_id}",
-                "type": "series",
-                "name": name,
-                "poster": f"https://image.tmdb.org/t/p/w500{poster_path}" if poster_path else None,
-                "description": f"Netflix NL Top 10 – positie #{rank}",
-            })
+    for rank, name in list_titles:
+        tmdb_id, poster_path = tmdb_lookup(name, is_series=is_series)
+        if is_series:
+            idv = f"tmdb:tv:{tmdb_id}" if tmdb_id else f"flix-fallback-s{rank}"
+            typ = "series"
         else:
-            metas.append({
-                "id": f"netflix-fallback-{rank}",
-                "type": "series",
-                "name": name,
-                "poster": None,
-                "description": f"Netflix NL Top 10 – positie #{rank} (TMDB match niet gevonden)",
-            })
+            idv = f"tmdb:movie:{tmdb_id}" if tmdb_id else f"flix-fallback-m{rank}"
+            typ = "movie"
+        metas.append({
+            "id": idv,
+            "type": typ,
+            "name": name,
+            "poster": f"https://image.tmdb.org/t/p/w500{poster_path}" if poster_path else None,
+            "description": f"Netflix NL Top 10 – positie #{rank}"
+        })
+    return metas
 
-    os.makedirs(os.path.dirname(OUT_PATH), exist_ok=True)
-    with open(OUT_PATH, "w", encoding="utf-8") as f:
-        json.dump({"metas": metas}, f, ensure_ascii=False, indent=2)
-    print(f"Geschreven: {OUT_PATH} ({len(metas)} items)")
+def main():
+    date_str, html = fetch_first_available_html()
+    block_html = find_netflix_section(html)
+    movies_df, shows_df = parse_netflix_top10(block_html)
+
+    shows = table_to_top10(shows_df)
+    movies = table_to_top10(movies_df)
+
+    if not shows and not movies:
+        raise RuntimeError("Kon Netflix TOP 10 Movies/TV niet vinden op de pagina")
+
+    os.makedirs(os.path.dirname(OUT_SERIES), exist_ok=True)
+
+    if shows:
+        series_metas = build_metas(shows, is_series=True)
+        with open(OUT_SERIES, "w", encoding="utf-8") as f:
+            json.dump({"metas": series_metas}, f, ensure_ascii=False, indent=2)
+        print(f"[flix] Netflix SERIES geschreven ({len(series_metas)}) – datum {date_str}")
+    else:
+        with open(OUT_SERIES, "w", encoding="utf-8") as f:
+            json.dump({"metas": []}, f, ensure_ascii=False, indent=2)
+        print("[flix] Geen Netflix series gevonden; lege lijst geschreven")
+
+    if movies:
+        movies_metas = build_metas(movies, is_series=False)
+        with open(OUT_MOVIES, "w", encoding="utf-8") as f:
+            json.dump({"metas": movies_metas}, f, ensure_ascii=False, indent=2)
+        print(f"[flix] Netflix MOVIES geschreven ({len(movies_metas)}) – datum {date_str}")
+    else:
+        with open(OUT_MOVIES, "w", encoding="utf-8") as f:
+            json.dump({"metas": []}, f, ensure_ascii=False, indent=2)
+        print("[flix] Geen Netflix films gevonden; lege lijst geschreven")
 
 if __name__ == "__main__":
     main()
