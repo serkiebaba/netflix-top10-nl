@@ -6,7 +6,7 @@ on:
   workflow_dispatch:      # handmatig "Run workflow"
 
 permissions:
-  contents: write         # nodig om te kunnen committen/pushen
+  contents: write
 
 jobs:
   build:
@@ -33,9 +33,16 @@ jobs:
 
       - name: Commit & push caches
         run: |
+          set -e
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git pull --rebase
+
+          # 1) Stage & commit eerst
           git add cache/netflix_nl_series.json cache/netflix_nl_movies.json
-          git diff --staged --quiet && echo "No changes" || git commit -m "Update Netflix NL caches"
-          git push
+          git diff --staged --quiet || git commit -m "Update Netflix NL caches"
+
+          # 2) Rebase op origin met autostash (voorkomt lokale wijzigingen-issues)
+          git pull --rebase --autostash
+
+          # 3) Push naar main
+          git push || git push --force-with-lease
