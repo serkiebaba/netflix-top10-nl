@@ -1,65 +1,106 @@
 import os, io, json
 import requests
 import pandas as pd
+from bs4 import BeautifulSoup
 
 TMDB_API_KEY = os.getenv("TMDB_API_KEY", "").strip()
 OUT_PATH = os.path.join("cache", "netflix_nl_series.json")
 
-# Officiële datasets (moeten op 'top10.netflix.com' blijven)
 CSV_URLS = [
     "https://top10.netflix.com/data/AllWeeklyTop10ByCountry.csv",
     "https://top10.netflix.com/data/AllWeeklyTop10.csv",
 ]
 
-# Minimalistische headers; GEEN 'Referer' meer (die triggert soms een redirect naar tudum)
-HEADERS_PRIMARY = {
-    "User-Agent": "Mozilla/5.0"
-}
-HEADERS_SECONDARY = {}  # fallback: helemaal kaal
+UA = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120 Safari/537.36"
 
-def fetch_csv_once(url: str, headers: dict) -> str:
-    """
-    Fetch zonder (foute) cross-domain redirect.
-    - Volg alleen redirects die op top10.netflix.com blijven.
-    - Als redirect naar 'www.netflix.com/tudum/...' => behandel als fout.
-    """
-    with requests.Session() as s:
-        r = s.get(url, headers=headers, timeout=30, allow_redirects=False)
-        # Handmatig redirect afhandelen (alleen als het op hetzelfde domein blijft)
-        if r.is_redirect or r.is_permanent_redirect:
-            loc = r.headers.get("Location", "")
-            # Normaliseer
-            loc_low = loc.lower()
-            if loc and loc_low.startswith("https://top10.netflix.com/"):
-                r = s.get(loc, headers=headers, timeout=30, allow_redirects=False)
-            else:
-                # Redirect naar ander domein (bijv. www.netflix.com/tudum/...) => forceer fout
-                raise RuntimeError(f"Unexpected redirect to different host: {loc}")
-
-        r.raise_for_status()
-        text = (r.text or "").strip()
-        if not text or text.lower() == "null":
-            raise RuntimeError("CSV body is empty or 'null'")
-        return text
-
-def fetch_csv() -> str:
+def fetch_csv_text_or_raise():
     last_error = None
     for url in CSV_URLS:
-        # 1) poging met minimal headers (zonder referer)
         try:
-            print(f"[build_cache] Fetching CSV (primary): {url}")
-            return fetch_csv_once(url, HEADERS_PRIMARY)
-        except Exception as e1:
-            print(f"[build_cache] Primary failed: {e1}")
+            print(f"[build_cache] Try CSV: {url}")
+            # GEEN referer; laat redirects toe (sommige IP's vereisen het), we accepteren 200 of 3xx->200
+            r = requests.get(url, headers={"User-Agent": UA}, timeout=30, allow_redirects=True)
+            r.raise_for_status()
+            t = (r.text or "").strip()
+            if t and t.lower() != "null":
+                print("[build_cache] CSV ok")
+                return t
+            raise RuntimeError("CSV leeg of 'null'")
+        except Exception as e:
+            print(f"[build_cache] CSV failed: {e}")
+            last_error = e
+    raise RuntimeError(f"CSV niet beschikbaar: {last_error}")
 
-        # 2) fallback-headers (helemaal kaal)
-        try:
-            print(f"[build_cache] Fetching CSV (secondary): {url}")
-            return fetch_csv_once(url, HEADERS_SECONDARY)
-        except Exception as e2:
-            print(f"[build_cache] Secondary failed: {e2}")
-            last_error = e2
-    raise RuntimeError(f"Kon CSV niet ophalen. Laatste fout: {last_error}")
+def fetch_html_table_titles(country="netherlands", section="tv"):
+    """
+    Fallback: haal de NL Top10 HTML op en parse de tabel.
+    URL-voorbeeld: https://www.netflix.com/tudum/top10/netherlands/tv
+    We extraheren de titels en ranks (top 10).
+    """
+    url = f"https://www.netflix.com/tudum/top10/{country}/{section}"
+    print(f"[build_cache] Fallback HTML: {url}")
+    r = requests.get(url, headers={"User-Agent": UA}, timeout=30)
+    r.raise_for_status()
+    html = r.text
+
+    # 1) Probeer met pandas.read_html (werkt vaak direct):
+    try:
+        tables = pd.read_html(html, flavor="bs4")  # vereist lxml + bs4
+        # Zoek tabel met 'Rank' kolom
+        target = None
+        for tb in tables:
+            cols = [str(c).strip().lower() for c in tb.columns]
+            if any("rank" in c for c in cols):
+                target = tb
+                break
+        if target is None:
+            raise RuntimeError("Geen tabel met 'Rank' kolom gevonden")
+        # Normaliseer kolomnamen
+        target.columns = [str(c).strip().lower() for c in target.columns]
+        # Vind kolommen
+        rank_col = next((c for c in target.columns if "rank" in c), None)
+        title_col = next((c for c in target.columns if "title" in c or "show" in c or "series" in c or "program" in c), None)
+        if title_col is None:
+            # fallback: soms staat de titel als index/kolom-0
+            title_col = target.columns[0]
+        # Sorteer en pak top 10
+        df10 = target.sort_values(by=rank_col).head(10) if rank_col else target.head(10)
+        titles = [str(x).strip() for x in df10[title_col].tolist()]
+        ranks  = list(range(1, len(titles)+1)) if rank_col is None else [int(v) for v in df10[rank_col].tolist()][:len(titles)]
+        if not titles:
+            raise RuntimeError("Geen titels uit tabel kunnen halen")
+        return list(zip(ranks, titles))
+    except Exception as e:
+        print(f"[build_cache] read_html faalde: {e}")
+
+    # 2) Als read_html niet lukt, brute-force met BeautifulSoup
+    soup = BeautifulSoup(html, "html.parser")
+    rows = []
+    # Zoek alle <table> en probeer rijen te lezen
+    for table in soup.find_all("table"):
+        for tr in table.find_all("tr"):
+            tds = tr.find_all(["td","th"])
+            texts = [td.get_text(strip=True) for td in tds]
+            if not texts:
+                continue
+            # Heuristiek: regel bevat rank + titel
+            # rank is cijfer 1..10
+            try:
+                possible_rank = int(texts[0])
+                # titel is ergens in de rest
+                title = None
+                for tx in texts[1:]:
+                    if len(tx) > 1 and not tx.isdigit():
+                        title = tx
+                        break
+                if possible_rank in range(1, 11) and title:
+                    rows.append((possible_rank, title))
+            except:
+                continue
+    rows = sorted(rows, key=lambda x: x[0])[:10]
+    if not rows:
+        raise RuntimeError("HTML fallback kon geen rijen vinden")
+    return rows
 
 def tmdb_tv_lookup(title):
     if not TMDB_API_KEY:
@@ -86,48 +127,53 @@ def tmdb_tv_lookup(title):
     return None, None
 
 def main():
-    csv_text = fetch_csv()
-    df = pd.read_csv(io.StringIO(csv_text))
+    titles_by_rank = None
 
-    # kolomhelpers (case-insensitive + fallbacks)
-    cn = [c.lower() for c in df.columns]
-    def col(name, fallbacks=()):
-        for i, c in enumerate(cn):
-            if c == name.lower():
-                return df.columns[i]
-        for fb in fallbacks:
+    # 1) Probeer CSV
+    try:
+        csv_text = fetch_csv_text_or_raise()
+        df = pd.read_csv(io.StringIO(csv_text))
+        # Case-insensitive kolomhelpers
+        cn = [c.lower() for c in df.columns]
+        def col(name, fallbacks=()):
             for i, c in enumerate(cn):
-                if c == fb.lower():
+                if c == name.lower():
                     return df.columns[i]
-        raise KeyError(f"Kolom {name} niet gevonden (beschikbaar: {df.columns.tolist()})")
+            for fb in fallbacks:
+                for i, c in enumerate(cn):
+                    if c == fb.lower():
+                        return df.columns[i]
+            raise KeyError(f"Kolom {name} niet gevonden (beschikbaar: {df.columns.tolist()})")
 
-    country_col   = col("country_name", ("country",))
-    rank_col      = col("weekly_rank", ("rank",))
-    category_col  = col("category",)
-    title_col     = col("show_title", ("title","show_title_name","series_title"))
+        country_col   = col("country_name", ("country",))
+        rank_col      = col("weekly_rank", ("rank",))
+        category_col  = col("category",)
+        title_col     = col("show_title", ("title","show_title_name","series_title"))
+        dfnl = df[(df[country_col] == "Netherlands") & (df[category_col].str.upper().str.contains("TV"))]
 
-    # Alleen Netherlands + TV
-    dfnl = df[(df[country_col] == "Netherlands") & (df[category_col].str.upper().str.contains("TV"))]
+        # Laatste week wanneer beschikbaar
+        week_col = None
+        for wk in ["week", "week_end", "week_start", "week_ended_on"]:
+            try:
+                week_col = col(wk)
+                break
+            except KeyError:
+                continue
+        if week_col:
+            latest_week = dfnl[week_col].max()
+            dfnl = dfnl[dfnl[week_col] == latest_week]
 
-    # Pak laatste week wanneer aanwezig
-    week_col = None
-    for wk in ["week", "week_end", "week_start", "week_ended_on"]:
-        try:
-            week_col = col(wk)
-            break
-        except KeyError:
-            continue
-    if week_col:
-        latest_week = dfnl[week_col].max()
-        dfnl = dfnl[dfnl[week_col] == latest_week]
+        dfnl = dfnl.sort_values(by=rank_col).head(10)
+        titles_by_rank = [(int(r[rank_col]), str(r[title_col]).strip()) for _, r in dfnl.iterrows()]
 
-    # Top 10
-    dfnl = dfnl.sort_values(by=rank_col).head(10)
+    except Exception as e:
+        print(f"[build_cache] CSV path failed, fallback to HTML: {e}")
+        # 2) Fallback: HTML tabel NL/TV
+        titles_by_rank = fetch_html_table_titles("netherlands", "tv")
 
+    # Bouw metas
     metas = []
-    for _, row in dfnl.iterrows():
-        name = str(row[title_col]).strip()
-        rank = int(row[rank_col])
+    for rank, name in titles_by_rank:
         tmdb_id, poster_path = tmdb_tv_lookup(name)
         if tmdb_id:
             metas.append({
