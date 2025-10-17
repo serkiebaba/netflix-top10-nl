@@ -1,10 +1,11 @@
-import os, csv, io, json, time
+import os, io, json
 import requests
 import pandas as pd
 
 TMDB_API_KEY = os.getenv("TMDB_API_KEY", "").strip()
 OUT_PATH = os.path.join("cache", "netflix_nl_series.json")
 
+# JUISTE CSV-bronnen (niet de oude tudum-URL!)
 CSV_URLS = [
     "https://top10.netflix.com/data/AllWeeklyTop10ByCountry.csv",
     "https://top10.netflix.com/data/AllWeeklyTop10.csv"
@@ -21,8 +22,9 @@ def fetch_csv():
         try:
             r = requests.get(url, headers=HEADERS, timeout=30)
             r.raise_for_status()
-            if r.text and r.text.strip().lower() != "null":
-                return r.text
+            t = (r.text or "").strip()
+            if t and t.lower() != "null":
+                return t
         except Exception as e:
             last_error = e
     raise RuntimeError(f"Kon CSV niet ophalen. Laatste fout: {last_error}")
@@ -33,7 +35,13 @@ def tmdb_tv_lookup(title):
     try:
         resp = requests.get(
             "https://api.themoviedb.org/3/search/tv",
-            params={"api_key": TMDB_API_KEY, "query": title, "include_adult": "false", "language": "en-US", "page": 1},
+            params={
+                "api_key": TMDB_API_KEY,
+                "query": title,
+                "include_adult": "false",
+                "language": "nl-NL",
+                "page": 1
+            },
             timeout=15
         )
         resp.raise_for_status()
@@ -47,8 +55,9 @@ def tmdb_tv_lookup(title):
 
 def main():
     csv_text = fetch_csv()
-
     df = pd.read_csv(io.StringIO(csv_text))
+
+    # kolomhelpers (case-insensitive + fallbacks)
     cn = [c.lower() for c in df.columns]
     def col(name, fallbacks=()):
         for i, c in enumerate(cn):
@@ -65,13 +74,22 @@ def main():
     category_col  = col("category",)
     title_col     = col("show_title", ("title","show_title_name","series_title"))
 
+    # Alleen Netherlands + TV
     dfnl = df[(df[country_col] == "Netherlands") & (df[category_col].str.upper().str.contains("TV"))]
 
-    if "week" in [x.lower() for x in df.columns]:
-        wcol = df.columns[[x.lower()=="week" for x in df.columns].index(True)]
-        latest_week = dfnl[wcol].max()
-        dfnl = dfnl[dfnl[wcol] == latest_week]
+    # Pak laatste week wanneer aanwezig
+    week_col = None
+    for wk in ["week", "week_end", "week_start", "week_ended_on"]:
+        try:
+            week_col = col(wk)
+            break
+        except KeyError:
+            continue
+    if week_col:
+        latest_week = dfnl[week_col].max()
+        dfnl = dfnl[dfnl[week_col] == latest_week]
 
+    # Top 10
     dfnl = dfnl.sort_values(by=rank_col).head(10)
 
     metas = []
@@ -99,7 +117,6 @@ def main():
     os.makedirs(os.path.dirname(OUT_PATH), exist_ok=True)
     with open(OUT_PATH, "w", encoding="utf-8") as f:
         json.dump({"metas": metas}, f, ensure_ascii=False, indent=2)
-
     print(f"Geschreven: {OUT_PATH} ({len(metas)} items)")
 
 if __name__ == "__main__":
