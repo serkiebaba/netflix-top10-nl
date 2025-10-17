@@ -1,73 +1,66 @@
 {
   "metas": [
     {
-      "id": "tmdb:tv:211898",
+      "id": "flix-fallback-s2",
       "type": "series",
-      "name": "1.0",
+      "name": "My Father, the BTK Killer",
       "poster": null,
-      "description": "Netflix NL Top 10 – positie #1"
-    },
-    {
-      "id": "tmdb:tv:120607",
-      "type": "series",
-      "name": "2.0",
-      "poster": "https://image.tmdb.org/t/p/w500/AkgtbbrLHQFu0ee43zWnYfYGBmo.jpg",
       "description": "Netflix NL Top 10 – positie #2"
     },
     {
-      "id": "tmdb:tv:237863",
+      "id": "flix-fallback-s3",
       "type": "series",
-      "name": "3.0",
-      "poster": "https://image.tmdb.org/t/p/w500/bQXJ2lGs40JOmwVFzlmnJdxz01N.jpg",
+      "name": "Inside Furioza",
+      "poster": null,
       "description": "Netflix NL Top 10 – positie #3"
     },
     {
-      "id": "tmdb:tv:239885",
+      "id": "tmdb:tv:112033",
       "type": "series",
-      "name": "4.0",
-      "poster": null,
+      "name": "Caramelo",
+      "poster": "https://image.tmdb.org/t/p/w500/1usBYRLu1VtIA9wffSwNvCZIWEC.jpg",
       "description": "Netflix NL Top 10 – positie #4"
     },
     {
-      "id": "tmdb:tv:202465",
+      "id": "flix-fallback-s5",
       "type": "series",
-      "name": "5.0",
-      "poster": "https://image.tmdb.org/t/p/w500/lZRoTl0ZAolqZdnnhVLnvlPWkUr.jpg",
+      "name": "Kung Fu Panda 4",
+      "poster": null,
       "description": "Netflix NL Top 10 – positie #5"
     },
     {
-      "id": "flix-fallback-s6",
+      "id": "tmdb:tv:302696",
       "type": "series",
-      "name": "6.0",
-      "poster": null,
+      "name": "KPop Demon Hunters",
+      "poster": "https://image.tmdb.org/t/p/w500/dTqYRhRzKayrCcDVqIS3bXOiRR5.jpg",
       "description": "Netflix NL Top 10 – positie #6"
     },
     {
-      "id": "tmdb:tv:108526",
+      "id": "flix-fallback-s7",
       "type": "series",
-      "name": "7.0",
-      "poster": "https://image.tmdb.org/t/p/w500/jIpKbSfQgOAJjBUpnqCyFVgdccd.jpg",
+      "name": "French Lover",
+      "poster": null,
       "description": "Netflix NL Top 10 – positie #7"
     },
     {
-      "id": "tmdb:tv:37866",
+      "id": "flix-fallback-s8",
       "type": "series",
-      "name": "8.0",
-      "poster": "https://image.tmdb.org/t/p/w500/sGmtNIVyZHqB0MLmbleNG4GmRVV.jpg",
+      "name": "The Royal Hotel",
+      "poster": null,
       "description": "Netflix NL Top 10 – positie #8"
     },
     {
-      "id": "flix-fallback-s9",
+      "id": "tmdb:tv:231611",
       "type": "series",
-      "name": "9.0",
-      "poster": null,
+      "name": "Wonder Park",
+      "poster": "https://image.tmdb.org/t/p/w500/kDrfnK7EQt5vcCONUe0Vk9qnSiE.jpg",
       "description": "Netflix NL Top 10 – positie #9"
     },
     {
-      "id": "tmdb:tv:116202",
+      "id": "flix-fallback-s10",
       "type": "series",
-      "name": "10.0",
-      "poster": "https://image.tmdb.org/t/p/w500/qYbJQrJoMQ6Uw8oLbIY0CurxdL.jpg",
+      "name": "The Secret Life of Pets 2",
+      "poster": null,
       "description": "Netflix NL Top 10 – positie #10"
     }
   ]
