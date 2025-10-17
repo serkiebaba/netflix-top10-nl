@@ -5,10 +5,10 @@ import pandas as pd
 TMDB_API_KEY = os.getenv("TMDB_API_KEY", "").strip()
 OUT_PATH = os.path.join("cache", "netflix_nl_series.json")
 
-# JUISTE CSV-bronnen (niet de oude tudum-URL!)
+# ✅ JUISTE CSV-bronnen (GEEN tudum!)
 CSV_URLS = [
     "https://top10.netflix.com/data/AllWeeklyTop10ByCountry.csv",
-    "https://top10.netflix.com/data/AllWeeklyTop10.csv"
+    "https://top10.netflix.com/data/AllWeeklyTop10.csv",
 ]
 
 HEADERS = {
@@ -20,12 +20,14 @@ def fetch_csv():
     last_error = None
     for url in CSV_URLS:
         try:
+            print(f"[build_cache] Fetching CSV: {url}")
             r = requests.get(url, headers=HEADERS, timeout=30)
             r.raise_for_status()
             t = (r.text or "").strip()
             if t and t.lower() != "null":
                 return t
         except Exception as e:
+            print(f"[build_cache] Failed: {e}")
             last_error = e
     raise RuntimeError(f"Kon CSV niet ophalen. Laatste fout: {last_error}")
 
