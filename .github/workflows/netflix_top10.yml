@@ -20,9 +20,8 @@ jobs:
         with:
           python-version: "3.11"
 
-- name: Install deps
-  run: pip install requests pandas lxml beautifulsoup4
-
+      - name: Install deps
+        run: pip install requests pandas lxml beautifulsoup4
 
       - name: Build cache JSON
         env:
@@ -36,4 +35,3 @@ jobs:
           git add cache/netflix_nl_series.json
           git diff --quiet && echo "No changes" || git commit -m "Update Netflix NL cache"
           git push
-
