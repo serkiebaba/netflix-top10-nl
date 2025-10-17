@@ -2,8 +2,11 @@ name: Build Netflix NL Top 10 cache
 
 on:
   schedule:
-    - cron: "0 6 * * *"  # draait elke dag om 06:00 UTC
-  workflow_dispatch:      # handmatig starten via "Run workflow"
+    - cron: "0 6 * * *"   # dagelijks om 06:00 UTC
+  workflow_dispatch:
+
+permissions:
+  contents: write
 
 jobs:
   build:
@@ -32,3 +35,4 @@ jobs:
           git add cache/netflix_nl_series.json
           git diff --quiet && echo "No changes" || git commit -m "Update Netflix NL cache"
           git push
+
