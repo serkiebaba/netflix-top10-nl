@@ -1,3 +1,13 @@
+name: Build Netflix NL Top 10 cache
+
+on:
+  schedule:
+    - cron: "0 6 * * *"   # dagelijks om 06:00 UTC
+  workflow_dispatch:      # handmatig "Run workflow"
+
+permissions:
+  contents: write         # nodig om te kunnen committen/pushen
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -5,7 +15,7 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0        # nodig om te kunnen pushen
+          fetch-depth: 0
           persist-credentials: true
 
       - name: Set up Python
