@@ -1,3 +1,74 @@
 {
-  "metas": []
+  "metas": [
+    {
+      "id": "tmdb:tv:211898",
+      "type": "series",
+      "name": "1.0",
+      "poster": null,
+      "description": "Netflix NL Top 10 – positie #1"
+    },
+    {
+      "id": "tmdb:tv:120607",
+      "type": "series",
+      "name": "2.0",
+      "poster": "https://image.tmdb.org/t/p/w500/AkgtbbrLHQFu0ee43zWnYfYGBmo.jpg",
+      "description": "Netflix NL Top 10 – positie #2"
+    },
+    {
+      "id": "tmdb:tv:237863",
+      "type": "series",
+      "name": "3.0",
+      "poster": "https://image.tmdb.org/t/p/w500/bQXJ2lGs40JOmwVFzlmnJdxz01N.jpg",
+      "description": "Netflix NL Top 10 – positie #3"
+    },
+    {
+      "id": "tmdb:tv:239885",
+      "type": "series",
+      "name": "4.0",
+      "poster": null,
+      "description": "Netflix NL Top 10 – positie #4"
+    },
+    {
+      "id": "tmdb:tv:202465",
+      "type": "series",
+      "name": "5.0",
+      "poster": "https://image.tmdb.org/t/p/w500/lZRoTl0ZAolqZdnnhVLnvlPWkUr.jpg",
+      "description": "Netflix NL Top 10 – positie #5"
+    },
+    {
+      "id": "flix-fallback-s6",
+      "type": "series",
+      "name": "6.0",
+      "poster": null,
+      "description": "Netflix NL Top 10 – positie #6"
+    },
+    {
+      "id": "tmdb:tv:108526",
+      "type": "series",
+      "name": "7.0",
+      "poster": "https://image.tmdb.org/t/p/w500/jIpKbSfQgOAJjBUpnqCyFVgdccd.jpg",
+      "description": "Netflix NL Top 10 – positie #7"
+    },
+    {
+      "id": "tmdb:tv:37866",
+      "type": "series",
+      "name": "8.0",
+      "poster": "https://image.tmdb.org/t/p/w500/sGmtNIVyZHqB0MLmbleNG4GmRVV.jpg",
+      "description": "Netflix NL Top 10 – positie #8"
+    },
+    {
+      "id": "flix-fallback-s9",
+      "type": "series",
+      "name": "9.0",
+      "poster": null,
+      "description": "Netflix NL Top 10 – positie #9"
+    },
+    {
+      "id": "tmdb:tv:116202",
+      "type": "series",
+      "name": "10.0",
+      "poster": "https://image.tmdb.org/t/p/w500/qYbJQrJoMQ6Uw8oLbIY0CurxdL.jpg",
+      "description": "Netflix NL Top 10 – positie #10"
+    }
+  ]
 }

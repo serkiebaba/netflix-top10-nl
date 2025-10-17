@@ -1,0 +1,74 @@
+{
+  "metas": [
+    {
+      "id": "tmdb:movie:940721",
+      "type": "movie",
+      "name": "1.0",
+      "poster": "https://image.tmdb.org/t/p/w500/7SLSy71c8ZqhHEIh7KO5h0obk88.jpg",
+      "description": "Netflix NL Top 10 – positie #1"
+    },
+    {
+      "id": "tmdb:movie:373449",
+      "type": "movie",
+      "name": "2.0",
+      "poster": "https://image.tmdb.org/t/p/w500/igWtprRqAQfJWoaUkjF0rm1nA66.jpg",
+      "description": "Netflix NL Top 10 – positie #2"
+    },
+    {
+      "id": "tmdb:movie:1259554",
+      "type": "movie",
+      "name": "3.0",
+      "poster": "https://image.tmdb.org/t/p/w500/kh8CWGuLuJnKXsFNjf22aKmAmm2.jpg",
+      "description": "Netflix NL Top 10 – positie #3"
+    },
+    {
+      "id": "tmdb:movie:1175803",
+      "type": "movie",
+      "name": "4.0",
+      "poster": null,
+      "description": "Netflix NL Top 10 – positie #4"
+    },
+    {
+      "id": "tmdb:movie:71786",
+      "type": "movie",
+      "name": "5.0",
+      "poster": "https://image.tmdb.org/t/p/w500/gxhwlC8hGWltPNCiLQW1blpo9im.jpg",
+      "description": "Netflix NL Top 10 – positie #5"
+    },
+    {
+      "id": "tmdb:movie:1107997",
+      "type": "movie",
+      "name": "6.0",
+      "poster": "https://image.tmdb.org/t/p/w500/7eoyj1dqbGtO1Rd8VBSrAGlJ0Jw.jpg",
+      "description": "Netflix NL Top 10 – positie #6"
+    },
+    {
+      "id": "flix-fallback-m7",
+      "type": "movie",
+      "name": "7.0",
+      "poster": null,
+      "description": "Netflix NL Top 10 – positie #7"
+    },
+    {
+      "id": "tmdb:movie:474114",
+      "type": "movie",
+      "name": "8.0",
+      "poster": "https://image.tmdb.org/t/p/w500/gsBILCUtoCGaFsdfRkeiskxu8Rs.jpg",
+      "description": "Netflix NL Top 10 – positie #8"
+    },
+    {
+      "id": "tmdb:movie:1181704",
+      "type": "movie",
+      "name": "9.0",
+      "poster": "https://image.tmdb.org/t/p/w500/eL91oFnvXAdlW4KN6qXAXTG567u.jpg",
+      "description": "Netflix NL Top 10 – positie #9"
+    },
+    {
+      "id": "tmdb:movie:95864",
+      "type": "movie",
+      "name": "10.0",
+      "poster": "https://image.tmdb.org/t/p/w500/sNJRLlbTTttqFUYRaTvrCN9kGix.jpg",
+      "description": "Netflix NL Top 10 – positie #10"
+    }
+  ]
+}
