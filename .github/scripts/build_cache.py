@@ -5,15 +5,13 @@ import pandas as pd
 TMDB_API_KEY = os.getenv("TMDB_API_KEY", "").strip()
 OUT_PATH = os.path.join("cache", "netflix_nl_series.json")
 
-# 1) Officiële CSV (kan op Actions-IPs soms redirecten/blokkeren)
 PRIMARY_CSV = [
     "https://top10.netflix.com/data/AllWeeklyTop10ByCountry.csv",
     "https://top10.netflix.com/data/AllWeeklyTop10.csv",
 ]
 
-# 2) Read-proxy mirrors (read-only fetchers) – vaak wél stabiel vanaf CI
-#   NB: dit zijn publieke, gratis read-proxies. Voor persoonlijk gebruik prima.
 PROXY_CSV = [
+    # read-only mirrors (geven de CSV body als tekst terug)
     "https://r.jina.ai/http://top10.netflix.com/data/AllWeeklyTop10ByCountry.csv",
     "https://r.jina.ai/http://top10.netflix.com/data/AllWeeklyTop10.csv",
     "https://r.jina.ai/https://top10.netflix.com/data/AllWeeklyTop10ByCountry.csv",
@@ -22,20 +20,36 @@ PROXY_CSV = [
 
 UA = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120 Safari/537.36"
 
+def _looks_like_csv(r: requests.Response, text: str) -> bool:
+    # 1) content-type check (sterk signaal)
+    ctype = (r.headers.get("Content-Type") or "").lower()
+    if "text/csv" in ctype or "application/csv" in ctype:
+        return True
+    # soms geeft proxy/plain text terug; valideer headerregel op verwachte kolommen
+    first_line = text.splitlines()[0] if text else ""
+    if "," not in first_line:
+        return False
+    header_lower = [h.strip().lower() for h in first_line.split(",")]
+    expected_tokens = {"country", "country_name", "weekly_rank", "category", "show_title", "title"}
+    return any(tok in header_lower for tok in expected_tokens)
+
 def fetch_text(url: str) -> str:
-    r = requests.get(url, headers={"User-Agent": UA, "Accept": "text/csv,*/*"}, timeout=40, allow_redirects=True)
+    r = requests.get(
+        url,
+        headers={"User-Agent": UA, "Accept": "text/csv,application/csv,*/*"},
+        timeout=40,
+        allow_redirects=True,
+    )
     r.raise_for_status()
     t = (r.text or "").strip()
     if not t or t.lower() == "null":
         raise RuntimeError("empty body")
-    # simpele sanity check: CSV moet minstens deze kop bevatten
-    if "," not in t.splitlines()[0]:
-        raise RuntimeError("not a CSV (first line has no commas)")
+    if not _looks_like_csv(r, t):
+        raise RuntimeError(f"not CSV (content-type={r.headers.get('Content-Type')}, first_line={t[:120]!r})")
     return t
 
 def fetch_csv_text() -> str:
     last = None
-    # 1) probeer direct bij Netflix
     for u in PRIMARY_CSV:
         try:
             print(f"[build_cache] CSV try (primary): {u}")
@@ -43,7 +57,6 @@ def fetch_csv_text() -> str:
         except Exception as e:
             print(f"[build_cache] primary failed: {e}")
             last = e
-    # 2) probeer via read-proxy (meestal succes)
     for u in PROXY_CSV:
         try:
             print(f"[build_cache] CSV try (proxy): {u}")
@@ -54,12 +67,7 @@ def fetch_csv_text() -> str:
     raise RuntimeError(f"Kon CSV niet ophalen: {last}")
 
 def read_csv_robust(csv_text: str) -> pd.DataFrame:
-    # meerdere parser-strategieën i.v.m. wisselende quoting/velden
-    for kwargs in (
-        {},
-        {"engine": "python"},
-        {"engine": "python", "on_bad_lines": "skip"},
-    ):
+    for kwargs in ({}, {"engine": "python"}, {"engine": "python", "on_bad_lines": "skip"}):
         try:
             return pd.read_csv(io.StringIO(csv_text), **kwargs)
         except Exception as e:
@@ -77,9 +85,9 @@ def tmdb_tv_lookup(title: str):
                 "query": title,
                 "include_adult": "false",
                 "language": "nl-NL",
-                "page": 1
+                "page": 1,
             },
-            timeout=20
+            timeout=20,
         )
         resp.raise_for_status()
         j = resp.json()
@@ -114,7 +122,7 @@ def main():
     # Filter Netherlands + TV
     dfnl = df[(df[country_col] == "Netherlands") & (df[category_col].astype(str).str.upper().str.contains("TV"))]
 
-    # Laatste week wanneer beschikbaar
+    # Laatste week (indien aanwezig)
     week_col = None
     for wk in ["week", "week_end", "week_start", "week_ended_on"]:
         try:
@@ -134,7 +142,6 @@ def main():
         try:
             rank = int(row[rank_col])
         except Exception:
-            # fallback als rank geen int is
             try:
                 rank = int(float(row[rank_col]))
             except Exception:
@@ -146,7 +153,7 @@ def main():
                 "type": "series",
                 "name": name,
                 "poster": f"https://image.tmdb.org/t/p/w500{poster_path}" if poster_path else None,
-                "description": f"Netflix NL Top 10 – positie #{rank}"
+                "description": f"Netflix NL Top 10 – positie #{rank}",
             })
         else:
             metas.append({
@@ -154,7 +161,7 @@ def main():
                 "type": "series",
                 "name": name,
                 "poster": None,
-                "description": f"Netflix NL Top 10 – positie #{rank} (TMDB match niet gevonden)"
+                "description": f"Netflix NL Top 10 – positie #{rank} (TMDB match niet gevonden)",
             })
 
     os.makedirs(os.path.dirname(OUT_PATH), exist_ok=True)
