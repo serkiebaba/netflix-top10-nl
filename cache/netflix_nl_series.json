@@ -50,17 +50,17 @@
       "description": "Netflix NL Top 10 – positie #7"
     },
     {
-      "id": "tmdb:tv:112033",
-      "type": "series",
-      "name": "Caramelo",
-      "poster": "https://image.tmdb.org/t/p/w500/1usBYRLu1VtIA9wffSwNvCZIWEC.jpg",
-      "description": "Netflix NL Top 10 – positie #8"
-    },
-    {
       "id": "tmdb:movie:1289888",
       "type": "series",
       "name": "French Lover",
       "poster": "https://image.tmdb.org/t/p/w500/bLqPpqNoKbNbXysIeft1tLIl6KB.jpg",
+      "description": "Netflix NL Top 10 – positie #8"
+    },
+    {
+      "id": "tmdb:tv:112033",
+      "type": "series",
+      "name": "Caramelo",
+      "poster": "https://image.tmdb.org/t/p/w500/1usBYRLu1VtIA9wffSwNvCZIWEC.jpg",
       "description": "Netflix NL Top 10 – positie #9"
     },
     {
