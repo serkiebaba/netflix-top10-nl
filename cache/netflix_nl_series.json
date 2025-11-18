@@ -57,17 +57,17 @@
       "description": "Netflix NL Top 10 – positie #8"
     },
     {
-      "id": "tmdb:tv:36945",
-      "type": "series",
-      "name": "Twisters",
-      "poster": "https://image.tmdb.org/t/p/w500/5r0lT4CKiJnJ2yRab582rXONdEl.jpg",
-      "description": "Netflix NL Top 10 – positie #9"
-    },
-    {
       "id": "tmdb:movie:343611",
       "type": "series",
       "name": "Jack Reacher: Never Go Back",
       "poster": "https://image.tmdb.org/t/p/w500/cOg3UT2NYWHZxp41vpxAnVCOC4M.jpg",
+      "description": "Netflix NL Top 10 – positie #9"
+    },
+    {
+      "id": "tmdb:movie:1361253",
+      "type": "series",
+      "name": "All I Need for Christmas",
+      "poster": "https://image.tmdb.org/t/p/w500/qH9VoUVO2rOVT3BrzP2SHOHtwrL.jpg",
       "description": "Netflix NL Top 10 – positie #10"
     }
   ]
