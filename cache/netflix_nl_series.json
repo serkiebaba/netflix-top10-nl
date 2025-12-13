@@ -8,24 +8,24 @@
       "description": "Netflix NL Top 10 – positie #1"
     },
     {
-      "id": "tmdb:movie:762441",
-      "type": "series",
-      "name": "A Quiet Place: Day One",
-      "poster": "https://image.tmdb.org/t/p/w500/hU42CRk14JuPEdqZG3AWmagiPAP.jpg",
-      "description": "Netflix NL Top 10 – positie #2"
-    },
-    {
       "id": "tmdb:movie:1069905",
       "type": "series",
       "name": "Jay Kelly",
       "poster": "https://image.tmdb.org/t/p/w500/bKLm1xS9DsODWB4i1SxTEvLXab9.jpg",
-      "description": "Netflix NL Top 10 – positie #3"
+      "description": "Netflix NL Top 10 – positie #2"
     },
     {
       "id": "tmdb:tv:222446",
       "type": "series",
       "name": "Death Wish",
       "poster": "https://image.tmdb.org/t/p/w500/poNuGl45juWjU6g8SRqhdUleWZk.jpg",
+      "description": "Netflix NL Top 10 – positie #3"
+    },
+    {
+      "id": "tmdb:movie:762441",
+      "type": "series",
+      "name": "A Quiet Place: Day One",
+      "poster": "https://image.tmdb.org/t/p/w500/hU42CRk14JuPEdqZG3AWmagiPAP.jpg",
       "description": "Netflix NL Top 10 – positie #4"
     },
     {
@@ -43,31 +43,31 @@
       "description": "Netflix NL Top 10 – positie #6"
     },
     {
-      "id": "tmdb:movie:1218762",
+      "id": "tmdb:tv:38112",
       "type": "series",
-      "name": "Jingle Bell Heist",
-      "poster": "https://image.tmdb.org/t/p/w500/rVOQF2Ucekug1B80A9crVx7Jn90.jpg",
+      "name": "Stigmata",
+      "poster": "https://image.tmdb.org/t/p/w500/fKGI9CMHvSyqjrbzypoEX4mXgSy.jpg",
       "description": "Netflix NL Top 10 – positie #7"
-    },
-    {
-      "id": "tmdb:movie:1180831",
-      "type": "series",
-      "name": "Troll 2",
-      "poster": "https://image.tmdb.org/t/p/w500/p6xAExLNFbHcLfvSuvLPoM8aqZU.jpg",
-      "description": "Netflix NL Top 10 – positie #8"
     },
     {
       "id": "tmdb:movie:1401318",
       "type": "series",
       "name": "A Merry Little Ex-Mas",
       "poster": "https://image.tmdb.org/t/p/w500/w4ytu75uJ1b0AgPd0wLm7iZMsWJ.jpg",
+      "description": "Netflix NL Top 10 – positie #8"
+    },
+    {
+      "id": "tmdb:movie:1218762",
+      "type": "series",
+      "name": "Jingle Bell Heist",
+      "poster": "https://image.tmdb.org/t/p/w500/rVOQF2Ucekug1B80A9crVx7Jn90.jpg",
       "description": "Netflix NL Top 10 – positie #9"
     },
     {
-      "id": "tmdb:tv:27958",
+      "id": "tmdb:movie:1180831",
       "type": "series",
-      "name": "That Christmas",
-      "poster": null,
+      "name": "Troll 2",
+      "poster": "https://image.tmdb.org/t/p/w500/p6xAExLNFbHcLfvSuvLPoM8aqZU.jpg",
       "description": "Netflix NL Top 10 – positie #10"
     }
   ]
