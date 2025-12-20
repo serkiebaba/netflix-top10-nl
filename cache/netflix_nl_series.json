@@ -8,45 +8,45 @@
       "description": "Netflix NL Top 10 – positie #1"
     },
     {
-      "id": "tmdb:movie:1441563",
+      "id": "tmdb:movie:1011477",
       "type": "series",
-      "name": "My Secret Santa",
-      "poster": "https://image.tmdb.org/t/p/w500/tpOAzBasKPsKwsUtPZOx1Mzuqq3.jpg",
+      "name": "Karate Kid: Legends",
+      "poster": "https://image.tmdb.org/t/p/w500/AEgggzRr1vZCLY86MAp93li43z.jpg",
       "description": "Netflix NL Top 10 – positie #2"
+    },
+    {
+      "id": "tmdb:movie:360920",
+      "type": "series",
+      "name": "The Grinch",
+      "poster": "https://image.tmdb.org/t/p/w500/smxA8yvZ0LzDPer9BIRd4pyOpx1.jpg",
+      "description": "Netflix NL Top 10 – positie #3"
     },
     {
       "id": "tmdb:movie:1584619",
       "type": "series",
       "name": "Murder in Monaco",
       "poster": "https://image.tmdb.org/t/p/w500/hW93OYJnnHwGaGa4S2mNxlEhgsF.jpg",
-      "description": "Netflix NL Top 10 – positie #3"
+      "description": "Netflix NL Top 10 – positie #4"
+    },
+    {
+      "id": "tmdb:movie:1441563",
+      "type": "series",
+      "name": "My Secret Santa",
+      "poster": "https://image.tmdb.org/t/p/w500/tpOAzBasKPsKwsUtPZOx1Mzuqq3.jpg",
+      "description": "Netflix NL Top 10 – positie #5"
+    },
+    {
+      "id": "tmdb:movie:8871",
+      "type": "series",
+      "name": "How the Grinch Stole Christmas",
+      "poster": "https://image.tmdb.org/t/p/w500/1WZbbPApEivA421gCOluuzMMKCk.jpg",
+      "description": "Netflix NL Top 10 – positie #6"
     },
     {
       "id": "tmdb:movie:529203",
       "type": "series",
       "name": "The Croods: A New Age",
       "poster": "https://image.tmdb.org/t/p/w500/tbVZ3Sq88dZaCANlUcewQuHQOaE.jpg",
-      "description": "Netflix NL Top 10 – positie #4"
-    },
-    {
-      "id": "tmdb:tv:298907",
-      "type": "series",
-      "name": "The Hustle",
-      "poster": null,
-      "description": "Netflix NL Top 10 – positie #5"
-    },
-    {
-      "id": "tmdb:tv:129999",
-      "type": "series",
-      "name": "Into the Blue",
-      "poster": "https://image.tmdb.org/t/p/w500/eo5pUJyJYbCQ1HnAwxQvMvOSjos.jpg",
-      "description": "Netflix NL Top 10 – positie #6"
-    },
-    {
-      "id": "tmdb:movie:1323475",
-      "type": "series",
-      "name": "Champagne Problems",
-      "poster": "https://image.tmdb.org/t/p/w500/A2TCPPkzmWd5SwjBlxMlB6yQ4yK.jpg",
       "description": "Netflix NL Top 10 – positie #7"
     },
     {
@@ -57,18 +57,11 @@
       "description": "Netflix NL Top 10 – positie #8"
     },
     {
-      "id": "tmdb:movie:1401318",
-      "type": "series",
-      "name": "A Merry Little Ex-Mas",
-      "poster": "https://image.tmdb.org/t/p/w500/w4ytu75uJ1b0AgPd0wLm7iZMsWJ.jpg",
-      "description": "Netflix NL Top 10 – positie #9"
-    },
-    {
       "id": "tmdb:movie:1218762",
       "type": "series",
       "name": "Jingle Bell Heist",
       "poster": "https://image.tmdb.org/t/p/w500/rVOQF2Ucekug1B80A9crVx7Jn90.jpg",
-      "description": "Netflix NL Top 10 – positie #10"
+      "description": "Netflix NL Top 10 – positie #9"
     }
   ]
 }
