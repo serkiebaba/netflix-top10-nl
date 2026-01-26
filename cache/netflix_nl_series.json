@@ -15,31 +15,31 @@
       "description": "Netflix NL Top 10 – positie #2"
     },
     {
+      "id": "tmdb:tv:27230",
+      "type": "series",
+      "name": "Max",
+      "poster": null,
+      "description": "Netflix NL Top 10 – positie #3"
+    },
+    {
       "id": "tmdb:tv:276204",
       "type": "series",
       "name": "No Time to Die",
       "poster": "https://image.tmdb.org/t/p/w500/fZiuJtxzOlvvbQcgrCSnwefqkcp.jpg",
-      "description": "Netflix NL Top 10 – positie #3"
+      "description": "Netflix NL Top 10 – positie #4"
     },
     {
       "id": "tmdb:movie:1100988",
       "type": "series",
       "name": "28 Years Later",
       "poster": "https://image.tmdb.org/t/p/w500/mIg1qCkVxnAlM2TK3RUF0tdEXlE.jpg",
-      "description": "Netflix NL Top 10 – positie #4"
-    },
-    {
-      "id": "tmdb:tv:27230",
-      "type": "series",
-      "name": "Max",
-      "poster": null,
       "description": "Netflix NL Top 10 – positie #5"
     },
     {
       "id": "tmdb:movie:1034716",
       "type": "series",
       "name": "People We Meet on Vacation",
-      "poster": "https://image.tmdb.org/t/p/w500/xzZaU0MN6L9oc1pl0RUXSB7hWwD.jpg",
+      "poster": "https://image.tmdb.org/t/p/w500/kOrJqRyt1pklNgDwJMjzN1GuNXS.jpg",
       "description": "Netflix NL Top 10 – positie #6"
     },
     {
