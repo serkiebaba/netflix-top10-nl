@@ -43,31 +43,31 @@
       "description": "Netflix NL Top 10 – positie #6"
     },
     {
+      "id": "tmdb:movie:1040599",
+      "type": "series",
+      "name": "Ghislaine Maxwell: Filthy Rich",
+      "poster": "https://image.tmdb.org/t/p/w500/Av758PktOlmKVlCzkhKBJqwpFcN.jpg",
+      "description": "Netflix NL Top 10 – positie #7"
+    },
+    {
       "id": "tmdb:movie:159824",
       "type": "series",
       "name": "Hotel Transylvania 2",
       "poster": "https://image.tmdb.org/t/p/w500/3nFnrivNgipSKZ8LZJJbRSlAcTR.jpg",
-      "description": "Netflix NL Top 10 – positie #7"
+      "description": "Netflix NL Top 10 – positie #8"
+    },
+    {
+      "id": "tmdb:movie:1426964",
+      "type": "series",
+      "name": "State of Fear",
+      "poster": "https://image.tmdb.org/t/p/w500/3Eaqedg8MAlnP51GYY8MCSIdTnV.jpg",
+      "description": "Netflix NL Top 10 – positie #9"
     },
     {
       "id": "tmdb:tv:27230",
       "type": "series",
       "name": "Max",
       "poster": null,
-      "description": "Netflix NL Top 10 – positie #8"
-    },
-    {
-      "id": "tmdb:tv:45923",
-      "type": "series",
-      "name": "First Blood",
-      "poster": "https://image.tmdb.org/t/p/w500/mUYbksMk7IkvKWDUPr9zq76562K.jpg",
-      "description": "Netflix NL Top 10 – positie #9"
-    },
-    {
-      "id": "tmdb:movie:1596291",
-      "type": "series",
-      "name": "Queen of Chess",
-      "poster": "https://image.tmdb.org/t/p/w500/ag5TZNcK3vHdCCpZIY8syjwzgfr.jpg",
       "description": "Netflix NL Top 10 – positie #10"
     }
   ]
