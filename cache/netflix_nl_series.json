@@ -8,46 +8,67 @@
       "description": "Netflix NL Top 10 – positie #1"
     },
     {
+      "id": "tmdb:tv:14009",
+      "type": "series",
+      "name": "The Addams Family",
+      "poster": "https://image.tmdb.org/t/p/w500/twfSYEw4cp5KS9HaxSLh6Q0Bmi6.jpg",
+      "description": "Netflix NL Top 10 – positie #2"
+    },
+    {
+      "id": "tmdb:movie:1428862",
+      "type": "series",
+      "name": "Firebreak",
+      "poster": "https://image.tmdb.org/t/p/w500/knh3c8LzL9fMhjc5SZPAOotXyiy.jpg",
+      "description": "Netflix NL Top 10 – positie #3"
+    },
+    {
       "id": "tmdb:tv:216061",
       "type": "series",
       "name": "Prometheus",
       "poster": "https://image.tmdb.org/t/p/w500/1BLFQlNfPZlgCRux4GAFTNObCIE.jpg",
-      "description": "Netflix NL Top 10 – positie #2"
+      "description": "Netflix NL Top 10 – positie #4"
     },
     {
       "id": "tmdb:movie:335",
       "type": "series",
       "name": "Once Upon a Time in the West",
       "poster": "https://image.tmdb.org/t/p/w500/qbYgqOczabWNn2XKwgMtVrntD6P.jpg",
-      "description": "Netflix NL Top 10 – positie #3"
+      "description": "Netflix NL Top 10 – positie #5"
     },
     {
       "id": "tmdb:movie:1261188",
       "type": "series",
       "name": "The Swedish Connection",
       "poster": "https://image.tmdb.org/t/p/w500/y5EyBB1FIjDAtsIgwNuxEC9caVF.jpg",
-      "description": "Netflix NL Top 10 – positie #4"
+      "description": "Netflix NL Top 10 – positie #6"
+    },
+    {
+      "id": "tmdb:movie:639721",
+      "type": "series",
+      "name": "The Addams Family 2",
+      "poster": "https://image.tmdb.org/t/p/w500/ld7YB9vBRp1GM1DT3KmFWSmtBPB.jpg",
+      "description": "Netflix NL Top 10 – positie #7"
     },
     {
       "id": "tmdb:tv:2395",
       "type": "series",
       "name": "The Legend of Tarzan",
       "poster": "https://image.tmdb.org/t/p/w500/w5mGLHBT59nFilSPgd5TgJnZ1ix.jpg",
-      "description": "Netflix NL Top 10 – positie #5"
+      "description": "Netflix NL Top 10 – positie #8"
     },
     {
       "id": "tmdb:tv:6454",
       "type": "series",
       "name": "Valentine's Day",
       "poster": "https://image.tmdb.org/t/p/w500/b7yK6QG3b59Lrdz1C0FS0DxEueS.jpg",
-      "description": "Netflix NL Top 10 – positie #6"
+      "description": "Netflix NL Top 10 – positie #9"
     },
     {
       "id": "tmdb:tv:31835",
       "type": "series",
       "name": "The Rip",
       "poster": "https://image.tmdb.org/t/p/w500/eCWX5RUCHVPBCfgU9V2zgEVWlFk.jpg",
-      "description": "Netflix NL Top 10 – positie #7"
+      "description": "Netflix NL Top 10 – positie #10"
     }
   ]
 }
