@@ -22,10 +22,10 @@
       "description": "Netflix NL Top 10 – positie #3"
     },
     {
-      "id": "tmdb:tv:14009",
+      "id": "tmdb:movie:37056",
       "type": "series",
-      "name": "The Addams Family",
-      "poster": "https://image.tmdb.org/t/p/w500/twfSYEw4cp5KS9HaxSLh6Q0Bmi6.jpg",
+      "name": "Letters to Juliet",
+      "poster": "https://image.tmdb.org/t/p/w500/y9DdvY1IRNS2hWLq161hmP2gXn.jpg",
       "description": "Netflix NL Top 10 – positie #4"
     },
     {
@@ -36,10 +36,10 @@
       "description": "Netflix NL Top 10 – positie #5"
     },
     {
-      "id": "tmdb:movie:37056",
+      "id": "tmdb:tv:14009",
       "type": "series",
-      "name": "Letters to Juliet",
-      "poster": "https://image.tmdb.org/t/p/w500/y9DdvY1IRNS2hWLq161hmP2gXn.jpg",
+      "name": "The Addams Family",
+      "poster": "https://image.tmdb.org/t/p/w500/twfSYEw4cp5KS9HaxSLh6Q0Bmi6.jpg",
       "description": "Netflix NL Top 10 – positie #6"
     },
     {
@@ -57,17 +57,17 @@
       "description": "Netflix NL Top 10 – positie #8"
     },
     {
-      "id": "tmdb:tv:216061",
-      "type": "series",
-      "name": "Prometheus",
-      "poster": "https://image.tmdb.org/t/p/w500/1BLFQlNfPZlgCRux4GAFTNObCIE.jpg",
-      "description": "Netflix NL Top 10 – positie #9"
-    },
-    {
       "id": "tmdb:tv:2395",
       "type": "series",
       "name": "The Legend of Tarzan",
       "poster": "https://image.tmdb.org/t/p/w500/w5mGLHBT59nFilSPgd5TgJnZ1ix.jpg",
+      "description": "Netflix NL Top 10 – positie #9"
+    },
+    {
+      "id": "tmdb:tv:216061",
+      "type": "series",
+      "name": "Prometheus",
+      "poster": "https://image.tmdb.org/t/p/w500/1BLFQlNfPZlgCRux4GAFTNObCIE.jpg",
       "description": "Netflix NL Top 10 – positie #10"
     }
   ]
