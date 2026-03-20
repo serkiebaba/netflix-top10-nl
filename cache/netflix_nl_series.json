@@ -29,17 +29,17 @@
       "description": "Netflix NL Top 10 – positie #4"
     },
     {
-      "id": "tmdb:movie:10398",
-      "type": "series",
-      "name": "Double Jeopardy",
-      "poster": "https://image.tmdb.org/t/p/w500/dPd9QvEeMQpgHO6iLB1LqALTZl.jpg",
-      "description": "Netflix NL Top 10 – positie #5"
-    },
-    {
       "id": "tmdb:movie:239678",
       "type": "series",
       "name": "This Is Where I Leave You",
       "poster": "https://image.tmdb.org/t/p/w500/rVUI2267FdetVWz9UBQbqTmRVhQ.jpg",
+      "description": "Netflix NL Top 10 – positie #5"
+    },
+    {
+      "id": "tmdb:movie:10398",
+      "type": "series",
+      "name": "Double Jeopardy",
+      "poster": "https://image.tmdb.org/t/p/w500/dPd9QvEeMQpgHO6iLB1LqALTZl.jpg",
       "description": "Netflix NL Top 10 – positie #6"
     },
     {
