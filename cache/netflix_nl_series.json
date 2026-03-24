@@ -29,24 +29,24 @@
       "description": "Netflix NL Top 10 – positie #4"
     },
     {
+      "id": "tmdb:movie:1482168",
+      "type": "series",
+      "name": "The Rise of the Red Hot Chili Peppers: Our Brother, Hillel",
+      "poster": "https://image.tmdb.org/t/p/w500/y9hHoO3eB7l3ZjYUZoJUJpZW22V.jpg",
+      "description": "Netflix NL Top 10 – positie #5"
+    },
+    {
       "id": "tmdb:tv:11256",
       "type": "series",
       "name": "French Girl",
       "poster": "https://image.tmdb.org/t/p/w500/c49ARvuUO10OdJ2lApDoL3uJwt5.jpg",
-      "description": "Netflix NL Top 10 – positie #5"
+      "description": "Netflix NL Top 10 – positie #6"
     },
     {
       "id": "tmdb:movie:379686",
       "type": "series",
       "name": "Space Jam: A New Legacy",
       "poster": "https://image.tmdb.org/t/p/w500/mDACFTANR34u6lvucazoYiFJOp7.jpg",
-      "description": "Netflix NL Top 10 – positie #6"
-    },
-    {
-      "id": "tmdb:movie:1482168",
-      "type": "series",
-      "name": "The Rise of the Red Hot Chili Peppers: Our Brother, Hillel",
-      "poster": "https://image.tmdb.org/t/p/w500/y9hHoO3eB7l3ZjYUZoJUJpZW22V.jpg",
       "description": "Netflix NL Top 10 – positie #7"
     },
     {
