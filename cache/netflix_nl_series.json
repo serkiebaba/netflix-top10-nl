@@ -50,17 +50,17 @@
       "description": "Netflix NL Top 10 – positie #7"
     },
     {
-      "id": "tmdb:movie:379686",
-      "type": "series",
-      "name": "Space Jam: A New Legacy",
-      "poster": "https://image.tmdb.org/t/p/w500/mDACFTANR34u6lvucazoYiFJOp7.jpg",
-      "description": "Netflix NL Top 10 – positie #8"
-    },
-    {
       "id": "tmdb:tv:11256",
       "type": "series",
       "name": "French Girl",
       "poster": "https://image.tmdb.org/t/p/w500/c49ARvuUO10OdJ2lApDoL3uJwt5.jpg",
+      "description": "Netflix NL Top 10 – positie #8"
+    },
+    {
+      "id": "tmdb:movie:379686",
+      "type": "series",
+      "name": "Space Jam: A New Legacy",
+      "poster": "https://image.tmdb.org/t/p/w500/mDACFTANR34u6lvucazoYiFJOp7.jpg",
       "description": "Netflix NL Top 10 – positie #9"
     },
     {
