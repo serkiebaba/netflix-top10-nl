@@ -43,31 +43,31 @@
       "description": "Netflix NL Top 10 – positie #6"
     },
     {
-      "id": "tmdb:movie:1114513",
+      "id": "tmdb:tv:219316",
       "type": "series",
-      "name": "Speak No Evil",
-      "poster": "https://image.tmdb.org/t/p/w500/dA4N6uWOnEMgbxXwFX7qX7adzs8.jpg",
-      "description": "Netflix NL Top 10 – positie #7"
-    },
-    {
-      "id": "tmdb:tv:284839",
-      "type": "series",
-      "name": "Extraction",
+      "name": "Wild Child",
       "poster": null,
-      "description": "Netflix NL Top 10 – positie #8"
+      "description": "Netflix NL Top 10 – positie #7"
     },
     {
       "id": "tmdb:movie:1641961",
       "type": "series",
       "name": "Untold: The Death & Life of Lamar Odom",
       "poster": "https://image.tmdb.org/t/p/w500/9Go8VKSzJIzn65b9c9l02ymHRlv.jpg",
+      "description": "Netflix NL Top 10 – positie #8"
+    },
+    {
+      "id": "tmdb:tv:284839",
+      "type": "series",
+      "name": "Extraction",
+      "poster": null,
       "description": "Netflix NL Top 10 – positie #9"
     },
     {
-      "id": "tmdb:tv:219316",
+      "id": "tmdb:movie:1114513",
       "type": "series",
-      "name": "Wild Child",
-      "poster": null,
+      "name": "Speak No Evil",
+      "poster": "https://image.tmdb.org/t/p/w500/dA4N6uWOnEMgbxXwFX7qX7adzs8.jpg",
       "description": "Netflix NL Top 10 – positie #10"
     }
   ]
