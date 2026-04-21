@@ -36,17 +36,17 @@
       "description": "Netflix NL Top 10 – positie #5"
     },
     {
-      "id": "tmdb:tv:62939",
-      "type": "series",
-      "name": "The Travellers",
-      "poster": "https://image.tmdb.org/t/p/w500/yfhPGiRZ0nNy5XbzIkKWQS5kmDd.jpg",
-      "description": "Netflix NL Top 10 – positie #6"
-    },
-    {
       "id": "tmdb:tv:5373",
       "type": "series",
       "name": "Anaconda",
       "poster": "https://image.tmdb.org/t/p/w500/dFp7Qupi4MGVsVvSozo4J9Ton9d.jpg",
+      "description": "Netflix NL Top 10 – positie #6"
+    },
+    {
+      "id": "tmdb:tv:62939",
+      "type": "series",
+      "name": "The Travellers",
+      "poster": "https://image.tmdb.org/t/p/w500/yfhPGiRZ0nNy5XbzIkKWQS5kmDd.jpg",
       "description": "Netflix NL Top 10 – positie #7"
     },
     {
@@ -64,10 +64,10 @@
       "description": "Netflix NL Top 10 – positie #9"
     },
     {
-      "id": "tmdb:tv:24684",
+      "id": "tmdb:tv:68043",
       "type": "series",
-      "name": "Lights Out",
-      "poster": "https://image.tmdb.org/t/p/w500/sUX5J7lS6FnCFvUOqXCYyQPp0f9.jpg",
+      "name": "The Interpreter",
+      "poster": "https://image.tmdb.org/t/p/w500/nfRgl1zLsXr1G8AgRBk7gWwARRl.jpg",
       "description": "Netflix NL Top 10 – positie #10"
     }
   ]
