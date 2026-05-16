@@ -22,10 +22,10 @@
       "description": "Netflix NL Top 10 – positie #3"
     },
     {
-      "id": "tmdb:tv:73331",
+      "id": "tmdb:tv:28213",
       "type": "series",
-      "name": "Monster-in-Law",
-      "poster": "https://image.tmdb.org/t/p/w500/AuVLcxO9L4o6kBJdj1cWxkuwsfX.jpg",
+      "name": "House of Wax",
+      "poster": "https://image.tmdb.org/t/p/w500/9djnx37A44tUsaQynSDmQiEgBek.jpg",
       "description": "Netflix NL Top 10 – positie #4"
     },
     {
@@ -43,17 +43,17 @@
       "description": "Netflix NL Top 10 – positie #6"
     },
     {
+      "id": "tmdb:tv:73331",
+      "type": "series",
+      "name": "Monster-in-Law",
+      "poster": "https://image.tmdb.org/t/p/w500/AuVLcxO9L4o6kBJdj1cWxkuwsfX.jpg",
+      "description": "Netflix NL Top 10 – positie #7"
+    },
+    {
       "id": "tmdb:movie:558449",
       "type": "series",
       "name": "Gladiator II",
       "poster": "https://image.tmdb.org/t/p/w500/2cxhvwyEwRlysAmRH4iodkvo0z5.jpg",
-      "description": "Netflix NL Top 10 – positie #7"
-    },
-    {
-      "id": "tmdb:movie:1630423",
-      "type": "series",
-      "name": "My Dearest Assassin",
-      "poster": "https://image.tmdb.org/t/p/w500/ul4dQcA68mtSx8J56N5gEcaCCtP.jpg",
       "description": "Netflix NL Top 10 – positie #8"
     },
     {
