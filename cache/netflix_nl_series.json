@@ -8,10 +8,10 @@
       "description": "Netflix NL Top 10 – positie #1"
     },
     {
-      "id": "tmdb:movie:4413",
+      "id": "tmdb:tv:112645",
       "type": "series",
       "name": "The Brave One",
-      "poster": "https://image.tmdb.org/t/p/w500/tdbOFY9ZnmOcxbNThJqGaIGCOow.jpg",
+      "poster": "https://image.tmdb.org/t/p/w500/8dFHcWxtgQHLRJSUL9tRGqR1ME6.jpg",
       "description": "Netflix NL Top 10 – positie #2"
     },
     {
@@ -36,31 +36,31 @@
       "description": "Netflix NL Top 10 – positie #5"
     },
     {
-      "id": "flix-fallback-s6",
-      "type": "series",
-      "name": "Tailgating",
-      "poster": null,
-      "description": "Netflix NL Top 10 – positie #6"
-    },
-    {
-      "id": "tmdb:tv:109893",
-      "type": "series",
-      "name": "The Killer",
-      "poster": "https://image.tmdb.org/t/p/w500/ftCKmUrVkgHBd5xlBJKpBn9cMTZ.jpg",
-      "description": "Netflix NL Top 10 – positie #7"
-    },
-    {
       "id": "tmdb:movie:1684240",
       "type": "series",
       "name": "Untold UK : Jamie Vardy",
       "poster": "https://image.tmdb.org/t/p/w500/d0pODTh6FOwn87iOeXGb7nKOdNT.jpg",
-      "description": "Netflix NL Top 10 – positie #8"
+      "description": "Netflix NL Top 10 – positie #6"
+    },
+    {
+      "id": "flix-fallback-s7",
+      "type": "series",
+      "name": "Tailgating",
+      "poster": null,
+      "description": "Netflix NL Top 10 – positie #7"
     },
     {
       "id": "tmdb:movie:558449",
       "type": "series",
       "name": "Gladiator II",
       "poster": "https://image.tmdb.org/t/p/w500/2cxhvwyEwRlysAmRH4iodkvo0z5.jpg",
+      "description": "Netflix NL Top 10 – positie #8"
+    },
+    {
+      "id": "tmdb:tv:109893",
+      "type": "series",
+      "name": "The Killer",
+      "poster": "https://image.tmdb.org/t/p/w500/ftCKmUrVkgHBd5xlBJKpBn9cMTZ.jpg",
       "description": "Netflix NL Top 10 – positie #9"
     },
     {
