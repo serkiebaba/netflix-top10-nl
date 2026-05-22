@@ -8,17 +8,17 @@
       "description": "Netflix NL Top 10 – positie #1"
     },
     {
-      "id": "tmdb:movie:4413",
-      "type": "series",
-      "name": "The Brave One",
-      "poster": "https://image.tmdb.org/t/p/w500/tdbOFY9ZnmOcxbNThJqGaIGCOow.jpg",
-      "description": "Netflix NL Top 10 – positie #2"
-    },
-    {
       "id": "tmdb:tv:95146",
       "type": "series",
       "name": "In Her Shoes",
       "poster": "https://image.tmdb.org/t/p/w500/juDj0ZOBc4Gei6tiwejgF9GL2KK.jpg",
+      "description": "Netflix NL Top 10 – positie #2"
+    },
+    {
+      "id": "tmdb:movie:4413",
+      "type": "series",
+      "name": "The Brave One",
+      "poster": "https://image.tmdb.org/t/p/w500/tdbOFY9ZnmOcxbNThJqGaIGCOow.jpg",
       "description": "Netflix NL Top 10 – positie #3"
     },
     {
