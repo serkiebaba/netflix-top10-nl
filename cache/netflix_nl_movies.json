@@ -1,17 +1,17 @@
 {
   "metas": [
     {
-      "id": "tmdb:movie:1297842",
-      "type": "movie",
-      "name": "GOAT",
-      "poster": "https://image.tmdb.org/t/p/w500/wfuqMlaExcoYiUEvKfVpUTt1v4u.jpg",
-      "description": "Netflix NL Top 10 – positie #1"
-    },
-    {
       "id": "tmdb:movie:1368881",
       "type": "movie",
       "name": "Ladies First",
       "poster": "https://image.tmdb.org/t/p/w500/kjR56Yv17pbjTVBTMjqepvcus4f.jpg",
+      "description": "Netflix NL Top 10 – positie #1"
+    },
+    {
+      "id": "tmdb:movie:1297842",
+      "type": "movie",
+      "name": "GOAT",
+      "poster": "https://image.tmdb.org/t/p/w500/wfuqMlaExcoYiUEvKfVpUTt1v4u.jpg",
       "description": "Netflix NL Top 10 – positie #2"
     },
     {
