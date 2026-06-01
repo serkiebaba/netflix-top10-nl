@@ -50,17 +50,17 @@
       "description": "Netflix NL Top 10 – positie #7"
     },
     {
-      "id": "tmdb:movie:1684246",
-      "type": "movie",
-      "name": "Untold UK: Vinnie Jones",
-      "poster": "https://image.tmdb.org/t/p/w500/AilC78z0a3wg0mBpBpurqjWCTxZ.jpg",
-      "description": "Netflix NL Top 10 – positie #8"
-    },
-    {
       "id": "tmdb:movie:12113",
       "type": "movie",
       "name": "Body of Lies",
       "poster": "https://image.tmdb.org/t/p/w500/OK0FoZV2UIYqYlIEa9NHPYe2Gl.jpg",
+      "description": "Netflix NL Top 10 – positie #8"
+    },
+    {
+      "id": "tmdb:movie:1684246",
+      "type": "movie",
+      "name": "Untold UK: Vinnie Jones",
+      "poster": "https://image.tmdb.org/t/p/w500/AilC78z0a3wg0mBpBpurqjWCTxZ.jpg",
       "description": "Netflix NL Top 10 – positie #9"
     },
     {
