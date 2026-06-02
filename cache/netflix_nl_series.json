@@ -22,17 +22,17 @@
       "description": "Netflix NL Top 10 – positie #3"
     },
     {
-      "id": "tmdb:tv:34541",
-      "type": "series",
-      "name": "Breaking In",
-      "poster": "https://image.tmdb.org/t/p/w500/cDEglbhl4g6yFg203agZAOm8m3b.jpg",
-      "description": "Netflix NL Top 10 – positie #4"
-    },
-    {
       "id": "tmdb:tv:299141",
       "type": "series",
       "name": "Apex",
       "poster": "https://image.tmdb.org/t/p/w500/iIfKOoFyudgiGftu8Qjh16RBaqS.jpg",
+      "description": "Netflix NL Top 10 – positie #4"
+    },
+    {
+      "id": "tmdb:tv:34541",
+      "type": "series",
+      "name": "Breaking In",
+      "poster": "https://image.tmdb.org/t/p/w500/cDEglbhl4g6yFg203agZAOm8m3b.jpg",
       "description": "Netflix NL Top 10 – positie #5"
     },
     {
@@ -43,24 +43,24 @@
       "description": "Netflix NL Top 10 – positie #6"
     },
     {
-      "id": "tmdb:movie:696506",
-      "type": "series",
-      "name": "Mickey 17",
-      "poster": "https://image.tmdb.org/t/p/w500/edKpE9B5qN3e559OuMCLZdW1iBZ.jpg",
-      "description": "Netflix NL Top 10 – positie #7"
-    },
-    {
       "id": "tmdb:movie:12113",
       "type": "series",
       "name": "Body of Lies",
       "poster": "https://image.tmdb.org/t/p/w500/OK0FoZV2UIYqYlIEa9NHPYe2Gl.jpg",
-      "description": "Netflix NL Top 10 – positie #8"
+      "description": "Netflix NL Top 10 – positie #7"
     },
     {
       "id": "tmdb:movie:1684246",
       "type": "series",
       "name": "Untold UK: Vinnie Jones",
       "poster": "https://image.tmdb.org/t/p/w500/AilC78z0a3wg0mBpBpurqjWCTxZ.jpg",
+      "description": "Netflix NL Top 10 – positie #8"
+    },
+    {
+      "id": "tmdb:movie:696506",
+      "type": "series",
+      "name": "Mickey 17",
+      "poster": "https://image.tmdb.org/t/p/w500/edKpE9B5qN3e559OuMCLZdW1iBZ.jpg",
       "description": "Netflix NL Top 10 – positie #9"
     },
     {
