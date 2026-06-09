@@ -22,17 +22,17 @@
       "description": "Netflix NL Top 10 – positie #3"
     },
     {
-      "id": "tmdb:tv:6732",
-      "type": "series",
-      "name": "GOAT",
-      "poster": "https://image.tmdb.org/t/p/w500/3TEX73koX9NroUA9lVwFDMTZtaC.jpg",
-      "description": "Netflix NL Top 10 – positie #4"
-    },
-    {
       "id": "tmdb:movie:1693002",
       "type": "series",
       "name": "The Murder of Rachel Nickell",
       "poster": "https://image.tmdb.org/t/p/w500/db9nxdSqZ8Mh6RDRreF1HFsz9hx.jpg",
+      "description": "Netflix NL Top 10 – positie #4"
+    },
+    {
+      "id": "tmdb:tv:305909",
+      "type": "series",
+      "name": "The Marked Woman",
+      "poster": null,
       "description": "Netflix NL Top 10 – positie #5"
     },
     {
@@ -43,10 +43,10 @@
       "description": "Netflix NL Top 10 – positie #6"
     },
     {
-      "id": "tmdb:tv:109907",
+      "id": "tmdb:tv:6732",
       "type": "series",
-      "name": "Ladies First",
-      "poster": "https://image.tmdb.org/t/p/w500/6yQikk6hNo5AdtNGU83udr7R1K9.jpg",
+      "name": "GOAT",
+      "poster": "https://image.tmdb.org/t/p/w500/3TEX73koX9NroUA9lVwFDMTZtaC.jpg",
       "description": "Netflix NL Top 10 – positie #7"
     },
     {
@@ -57,17 +57,17 @@
       "description": "Netflix NL Top 10 – positie #8"
     },
     {
-      "id": "tmdb:tv:305909",
+      "id": "tmdb:tv:109907",
       "type": "series",
-      "name": "The Marked Woman",
-      "poster": null,
+      "name": "Ladies First",
+      "poster": "https://image.tmdb.org/t/p/w500/6yQikk6hNo5AdtNGU83udr7R1K9.jpg",
       "description": "Netflix NL Top 10 – positie #9"
     },
     {
-      "id": "tmdb:tv:299141",
+      "id": "tmdb:tv:65270",
       "type": "series",
-      "name": "Apex",
-      "poster": "https://image.tmdb.org/t/p/w500/iIfKOoFyudgiGftu8Qjh16RBaqS.jpg",
+      "name": "Radio",
+      "poster": "https://image.tmdb.org/t/p/w500/uRUZDsvUfIP3JUEgOC8ReBlQQUU.jpg",
       "description": "Netflix NL Top 10 – positie #10"
     }
   ]
