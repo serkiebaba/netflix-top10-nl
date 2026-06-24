@@ -8,17 +8,17 @@
       "description": "Netflix NL Top 10 – positie #1"
     },
     {
-      "id": "tmdb:movie:950387",
-      "type": "series",
-      "name": "A Minecraft Movie",
-      "poster": "https://image.tmdb.org/t/p/w500/yFHHfHcUgGAxziP1C3lLt0q2T4s.jpg",
-      "description": "Netflix NL Top 10 – positie #2"
-    },
-    {
       "id": "tmdb:movie:1699155",
       "type": "series",
       "name": "Maternal Instinct",
       "poster": "https://image.tmdb.org/t/p/w500/4KdmT71AGzDMp5hJbAu9vysKQKT.jpg",
+      "description": "Netflix NL Top 10 – positie #2"
+    },
+    {
+      "id": "tmdb:movie:950387",
+      "type": "series",
+      "name": "A Minecraft Movie",
+      "poster": "https://image.tmdb.org/t/p/w500/yFHHfHcUgGAxziP1C3lLt0q2T4s.jpg",
       "description": "Netflix NL Top 10 – positie #3"
     },
     {
@@ -29,17 +29,17 @@
       "description": "Netflix NL Top 10 – positie #4"
     },
     {
-      "id": "tmdb:tv:62598",
-      "type": "series",
-      "name": "Wicked",
-      "poster": "https://image.tmdb.org/t/p/w500/z1N5U6tTEl36OcLXgt4UnaPtC3M.jpg",
-      "description": "Netflix NL Top 10 – positie #5"
-    },
-    {
       "id": "tmdb:tv:314361",
       "type": "series",
       "name": "Anora",
       "poster": null,
+      "description": "Netflix NL Top 10 – positie #5"
+    },
+    {
+      "id": "tmdb:tv:62598",
+      "type": "series",
+      "name": "Wicked",
+      "poster": "https://image.tmdb.org/t/p/w500/z1N5U6tTEl36OcLXgt4UnaPtC3M.jpg",
       "description": "Netflix NL Top 10 – positie #6"
     },
     {
