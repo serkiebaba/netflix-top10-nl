@@ -43,17 +43,17 @@
       "description": "Netflix NL Top 10 – positie #6"
     },
     {
-      "id": "tmdb:tv:314361",
+      "id": "tmdb:tv:106313",
       "type": "series",
-      "name": "Anora",
+      "name": "Office Romance",
       "poster": null,
       "description": "Netflix NL Top 10 – positie #7"
     },
     {
-      "id": "tmdb:tv:214305",
+      "id": "tmdb:tv:314361",
       "type": "series",
-      "name": "Office Romance",
-      "poster": "https://image.tmdb.org/t/p/w500/c0CtajtgYmSwR9fNmmMekBQ2qwP.jpg",
+      "name": "Anora",
+      "poster": null,
       "description": "Netflix NL Top 10 – positie #8"
     },
     {
